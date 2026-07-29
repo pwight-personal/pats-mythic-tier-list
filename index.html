@@ -56,6 +56,9 @@
     padding:30px}
   .hero.show{opacity:1}
   .hero .scene{position:absolute;inset:0;z-index:0}
+  .hero .hero-text{position:relative;z-index:3;max-width:580px;padding:15px 18px;border-radius:10px;
+    background:linear-gradient(180deg, rgba(5,7,12,.5), rgba(5,7,12,.85));
+    border:1px solid rgba(230,194,100,.14)}
   .hero .label{position:relative;z-index:3;font-size:13px;letter-spacing:5px;text-transform:uppercase;
     color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8);font-weight:700}
   .hero .label b{display:block;font-size:30px;letter-spacing:2px;margin-top:6px;font-weight:800}
@@ -207,7 +210,7 @@
   <div class="hero show" id="heroActive">
     <div class="scene" id="heroScene"></div>
     <div id="heroFx"></div>
-    <div>
+    <div class="hero-text">
       <div class="label"><b id="heroTitle">Into the Fray</b></div>
       <div class="flavor" id="heroDesc">A Devourer Demon Hunter channels Void Metamorphosis, souls spiraling inward before Collapsing Star tears through the pack. The cooldown-smoothing of 12.1 keeps the chaos steady &mdash; burst still bites, but the filler between bites now draws blood.</div>
     </div>
@@ -569,11 +572,13 @@ function embersInto(el, count, colors){
   }
 }
 function specSlug(spec){ return spec.toLowerCase().replace(/ /g,"-"); }
+// Bump IMGVER whenever you replace spec/class images so browsers + CDN refetch them.
+const IMGVER = 5;
 function getHero(classKey, spec){
   const slug = specSlug(spec);
   const specId = classKey+"_"+slug;
   const h = HERO_SPEC[specId] || { title:spec, desc:"", embers:["#e6c264","#e6c264"] };
-  return { specImg:`cinematic-${classKey}-${slug}.jpg`, classImg:`cinematic-${classKey}.jpg`,
+  return { specImg:`cinematic-${classKey}-${slug}.jpg?v=${IMGVER}`, classImg:`cinematic-${classKey}.jpg?v=${IMGVER}`,
            title:h.title, desc:h.desc, embers:h.embers };
 }
 function topSpecHero(role){
