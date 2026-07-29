@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -512,26 +512,51 @@ function render(role){
   }).join("");
 })();
 
-// ---- Cinematic heroes (role + per-class) ----
-const HERO_ROLE = {
-  dps:{img:"cinematic-dps.jpg", title:"Into the Fray", desc:"A Devourer Demon Hunter channels Void Metamorphosis, souls spiraling inward before Collapsing Star tears through the pack. The cooldown-smoothing of 12.1 keeps the chaos steady — burst still bites, but the filler between bites now draws blood.", embers:["#ff8a3c","#c060ff","#ffd27a"]},
-  tank:{img:"cinematic-tank.jpg", title:"Bulwark Unbroken", desc:"A Guardian Druid plants wide in bear form, Ironfur layering as Rage spenders feed Gory Fur — each making the other free. With player health and enemy damage both up 25%, the steady wall holds where the spiky glass cannon cracks.", embers:["#5aa0e6","#e6c264"]},
-  healer:{img:"cinematic-healer.jpg", title:"Hands of Renewal", desc:"A Mistweaver Monk weaves Soothing Mist through the party, Mastery: Gust of Mists now amplified 50%. The 25% health pool turns frantic twitch-healing into deliberate triage — breathe, plan, and let the steady hands carry the key.", embers:["#7dffae","#ffd98a"]}
-};
-const HERO_CLASS = {
-  dk:{img:"cinematic-dk.jpg", title:"Frostmourne Hungers", desc:"A Death Knight marshals the undead — Lesser Ghouls swarm, disease spreads through the pack, and the army of the dead crashes into the front. Death Grip yanks the priority target into reach while Anti-Magic Zone swallows the deadliest cast.", embers:["#C41F3B","#e6c264"]},
-  dh:{img:"cinematic-dh.jpg", title:"Into the Fray", desc:"A Demon Hunter channels Void Metamorphosis, souls spiraling inward before Collapsing Star tears through the pack. The Illidari dance between blades and fel, turning demonic power against its makers.", embers:["#A330C9","#ff8a3c"]},
-  druid:{img:"cinematic-druid.jpg", title:"Bulwark Unbroken", desc:"A Guardian Druid plants wide in bear form, Ironfur layering as Rage feeds Gory Fur — each making the other free. Moonfire marks the prey while the steady wall holds where the glass cannon cracks.", embers:["#FF7D0A","#7dffae"]},
-  evoker:{img:"cinematic-evoker.jpg", title:"Dragon's Breath", desc:"An Evoker descends on wings of bronze and emerald, Breath of Eons streaking the battlefield as allies surge with its power. From preservation's verdant embrace to augmentation's bending of time, the dragon reshapes the fight.", embers:["#33937F","#69CCF0"]},
-  hunter:{img:"cinematic-hunter.jpg", title:"On the Hunt", desc:"A Hunter looses arrow and beast alike — the pet tears into the pack while Explosive Shot blooms again and again, and a well-placed Freezing Trap locks the priority target down. From range or up close, the prey never rests.", embers:["#ABD473","#e6c264"]},
-  mage:{img:"cinematic-mage.jpg", title:"Arcane Fury", desc:"A Mage bends the fabric of magic itself — frost shattering in glacial bursts, fire blooming into Combustion, or arcane barrages crackling across the pack. Every cast rewrites the rules of the fight.", embers:["#69CCF0","#ffffff"]},
-  monk:{img:"cinematic-monk.jpg", title:"Hands of Renewal", desc:"A Mistweaver Monk weaves Soothing Mist through the party, Mastery: Gust of Mists amplified. The steady hands carry the key — breathe, plan, and let the jade discipline hold the group through the storm.", embers:["#00FF96","#ffd98a"]},
-  pal:{img:"cinematic-pal.jpg", title:"Light Unyielding", desc:"A Paladin raises blade and shield bathed in the Light — Avenger's Shield silences the cast, Devotion Aura shelters the party, and a well-timed Lay on Hands pulls an ally back from the brink. The Light does not waver.", embers:["#F58CBA","#e6c264"]},
-  priest:{img:"cinematic-priest.jpg", title:"Shadow and Grace", desc:"A Priest walks the line between Shadow and Light — Voidform unfolds in a chorus of Shadow Word: Madness and psychic bursts, while disciplined atonement turns every Smite into salvation for the group.", embers:["#ffffff","#9482C9"]},
-  rogue:{img:"cinematic-rogue.jpg", title:"From the Shadows", desc:"A Rogue slips between heartbeats — Shroud of Concealment veils the party past the patrol, then Kidney Shot and bleeds dismantle the priority target before it can answer. The blade finds the gap, every time.", embers:["#FFF569","#ffffff"]},
-  shaman:{img:"cinematic-shaman.jpg", title:"Stormcall", desc:"A Shaman calls the storm — Chain Lightning leaps through the pack, Capacitor Totem cracks the earth into a stun, and Bloodlust ignites the group's cooldown windows. Skyfury hums as the elements answer.", embers:["#0070DE","#7dffae"]},
-  lock:{img:"cinematic-lock.jpg", title:"Burn It All", desc:"A Warlock opens a gateway to the Legion's remnants — Infernal crashes down, demonic hordes swarm, and curses rot the pack while Healthstones keep the party standing. Every doorway is a shortcut; every pack is kindling.", embers:["#9482C9","#ff8a3c"]},
-  war:{img:"cinematic-war.jpg", title:"For the Battle", desc:"A Warrior leaps in with weapon high — Ravager erupts, Rallying Cry bolsters the party's health, and a thunderous Intimidating Shout scatters the pack. The blade carves the front line and the shout turns the group into a wall.", embers:["#C79C6E","#e6c264"]}
+// ---- Cinematic heroes: one per spec (40) ----
+// Key: classKey + "_" + specSlug (spec name lowercased, spaces -> hyphens).
+// Image is auto-resolved to cinematic-<classKey>-<specSlug>.jpg by getHero().
+// To customize a spec, edit its entry below (title / desc / embers).
+const HERO_SPEC = {
+  "dk_unholy":{title:"Frostmourne Hungers", desc:"An Unholy Death Knight commands the dead — Lesser Ghouls swarm, disease spreads through the pack, and the army of the dead crashes into the front while Putrefy rots the priority target down.", embers:["#C41F3B","#e6c264"]},
+  "dk_frost":{title:"Ice and Obliteration", desc:"A Frost Death Knight channels the frozen north — Frostwyrm's Fury descends, Howling Blast cleaves the pack, and Obliteration turns every runic strike into a burst of shattering ice.", embers:["#C41F3B","#69CCF0"]},
+  "dk_blood":{title:"The Crimson Scourge", desc:"A Blood Death Knight drinks the damage dealt — Blood Plague heals as it rots, Dancing Rune Weapon mirrors the assault, and Gorefiend's Grasp yanks the pack into a single killing field.", embers:["#C41F3B","#e6c264"]},
+  "dh_havoc":{title:"Fury of the Illidari", desc:"A Havoc Demon Hunter blurs between blades — Fel Rush carves the line, Eye Beam tears the pack, and Metamorphosis unleashes a storm of chaos strikes that never slows.", embers:["#A330C9","#ff8a3c"]},
+  "dh_vengeance":{title:"Sigil of Hatred", desc:"A Vengeance Demon Hunter turns demon power inward — Fiery Brand brands the target, Sigils of Silence and Misery choke the casters, and Soul Cleave devours the damage dealt back as survival.", embers:["#A330C9","#33937F"]},
+  "dh_devourer":{title:"Into the Fray", desc:"A Devourer Demon Hunter gathers souls into Void Metamorphosis, spiraling inward before Collapsing Star tears through the pack — the Illidari's newest art, where every kill feeds the void.", embers:["#A330C9","#ff8a3c"]},
+  "druid_balance":{title:"Eclipse of the Moon", desc:"A Balance Druid rides the Eclipse — Starfall blankets the pack, Moonfire marks the prey, and Starsurge channels the gathered Astral Power into a single burst of celestial wrath.", embers:["#FF7D0A","#69CCF0"]},
+  "druid_feral":{title:"Tooth and Claw", desc:"A Feral Druid shreds in cat form — Rake and Rip bleed the priority target while Primal Wrath spreads the carnage, energy flowing freely as the bleeds stack and the pack falls.", embers:["#FF7D0A","#ABD473"]},
+  "druid_guardian":{title:"Bulwark Unbroken", desc:"A Guardian Druid plants wide in bear form — Ironfur layers as Rage feeds Gory Fur, each making the other free, and the steady wall holds where the spiky glass cannon cracks.", embers:["#FF7D0A","#7dffae"]},
+  "druid_restoration":{title:"Bloom of the Wild", desc:"A Restoration Druid blankets the party in blooms — Rejuvenation and Lifebloom stack, Wild Growth spreads the mending, and Tranquility roots the group in protective life.", embers:["#FF7D0A","#7dffae"]},
+  "evoker_devastation":{title:"Fire from the Sky", desc:"A Devastation Evoker descends — Dragonrage ignites the air, Pyre bursts across the pack, and Unbound Flame erupts as the cooldown ends in a cascade of molten emerald fire.", embers:["#33937F","#ff8a3c"]},
+  "evoker_augmentation":{title:"Bending of Time", desc:"An Augmentation Evoker weaves time itself — Breath of Eons streaks the battlefield, Prescience marks the prey, and allies surge with power as the dragon bends fate in the group's favor.", embers:["#33937F","#69CCF0"]},
+  "evoker_preservation":{title:"Verdant Embrace", desc:"A Preservation Evoker cradles the party in emerald life — Dream Breath mends over time, Echo duplicates the spell, and Rewind unspools the last five seconds of damage taken.", embers:["#33937F","#7dffae"]},
+  "hunter_beast-mastery":{title:"Master and Beast", desc:"A Beast Mastery Hunter looses the pack — the pet tears in as Kill Command drives it home, Beast Cleave spreads the carnage, and Cobra Shot weaves the damage into a relentless stream.", embers:["#ABD473","#e6c264"]},
+  "hunter_marksmanship":{title:"One Shot, One Kill", desc:"A Marksmanship Hunter picks apart the line from range — Aimed Shot pierces, Rapid Fire shreds, and the reworked Explosive Shot blooms again and again into the cluster.", embers:["#ABD473","#69CCF0"]},
+  "hunter_survival":{title:"Up Close and Personal", desc:"A Survival Hunter wades in with spear and flame — Wildfire Bomb blooms across the pack, Raptor Strike carves the priority target, and a well-placed Freezing Trap locks the threat down.", embers:["#ABD473","#ff8a3c"]},
+  "mage_arcane":{title:"Arcane Fury", desc:"An Arcane Mage bends the fabric of magic — Touch of the Magi loads the next burst, Arcane Barrage crackles across the pack, and Prismatic Bolt erupts as the charges peak.", embers:["#69CCF0","#ffffff"]},
+  "mage_fire":{title:"Combustion", desc:"A Fire Mage blooms into Combustion — Pyroblast rains, Flamestrike blankets the pack, and every crit chains into the next as the inferno feeds itself.", embers:["#69CCF0","#ff8a3c"]},
+  "mage_frost":{title:"Glacial Shatter", desc:"A Frost Mage freezes the fight — Frozen Orb spreads the chill, Glacial Spike shatters the priority target, and Ray of Frost lances through as the Freezing Stacks pop.", embers:["#69CCF0","#ffffff"]},
+  "monk_brewmaster":{title:"Stagger and Sip", desc:"A Brewmaster Monk drinks deep — Stagger soaks the hit, Purifying Brew clears the wound, and Celestial Brew shields as the keg spins and the brew flows.", embers:["#00FF96","#e6c264"]},
+  "monk_mistweaver":{title:"Hands of Renewal", desc:"A Mistweaver Monk weaves Soothing Mist through the party — Gust of Mists amplifies the mending, Renewing Mist spreads, and Revival clears the group in a single jade breath.", embers:["#00FF96","#ffd98a"]},
+  "monk_windwalker":{title:"Zenith of the Storm", desc:"A Windwalker Monk flows through the pack — Spinning Crane Kick spins, Blackout Kick chains, and Zenith ignites a burst of martial storm as the chi peaks.", embers:["#00FF96","#69CCF0"]},
+  "pal_retribution":{title:"Light Unyielding", desc:"A Retribution Paladin raises the hammer — Templar's Verdict cleaves, Divine Storm sweeps the pack, and Avenging Wrath ignites a burst of holy fury on the unworthy.", embers:["#F58CBA","#e6c264"]},
+  "pal_protection":{title:"Shield of the Light", desc:"A Protection Paladin raises shield and Light — Avenger's Shield silences the cast, Shield of the Righteous bolsters the wall, and Consecration sanctifies the ground the fight is held on.", embers:["#F58CBA","#e6c264"]},
+  "pal_holy":{title:"Lay on Hands", desc:"A Holy Paladin channels the Light — Holy Shock mends and smites in one, Light of Dawn washes the group, and Lay on Hands pulls an ally back from the very brink.", embers:["#F58CBA","#ffd98a"]},
+  "priest_discipline":{title:"Atonement", desc:"A Discipline Priest heals through damage — Smite and Penance weave atonement onto the party, and every blow lands as salvation while the void shields the front.", embers:["#ffffff","#9482C9"]},
+  "priest_holy":{title:"Word of Light", desc:"A Holy Priest speaks the Word — Holy Word: Serenity mends, Sanctify blankets the group, and Guardian Spirit cradles a chosen ally through the killing blow.", embers:["#ffffff","#ffd98a"]},
+  "priest_shadow":{title:"Shadow and Grace", desc:"A Shadow Priest unfolds Voidform — Shadow Word: Madness spreads, Void Volley erupts in the cooldown, and psychic bursts ripple through the pack as the whispers build.", embers:["#9482C9","#ffffff"]},
+  "rogue_assassination":{title:"Death by a Thousand Cuts", desc:"An Assassination Rogue bleeds the target dry — Garrote and Rupture stack, Envenom lands the killing strike, and the bleeds spread as the silence takes the caster's voice.", embers:["#FFF569","#ffffff"]},
+  "rogue_outlaw":{title:"Roll the Bones", desc:"An Outlaw Rogue plays the hand — Sinister Strike builds, Dispatch lands, and Killing Spree carves through the pack as the bones roll the group's favor.", embers:["#FFF569","#e6c264"]},
+  "rogue_subtlety":{title:"From the Shadows", desc:"A Subtlety Rogue slips between heartbeats — Shadow Dance unfolds, Shuriken Storm blankets the pack, and the strike lands before the target knows it was thrown.", embers:["#FFF569","#ffffff"]},
+  "shaman_elemental":{title:"Stormcall", desc:"An Elemental Shaman calls the storm — Chain Lightning leaps the pack, Earthquake cracks the ground, and Bloodlust ignites the group's cooldown windows as the elements answer.", embers:["#0070DE","#7dffae"]},
+  "shaman_enhancement":{title:"Stormbringer", desc:"An Enhancement Shaman strikes with the storm — Crash Lightning cleaves the pack, Stormstrike chains, and Ascendance ignites a burst of elemental fury at the peak.", embers:["#0070DE","#69CCF0"]},
+  "shaman_restoration":{title:"Healing Rain", desc:"A Restoration Shaman calls the waters — Healing Rain blankets the group, Chain Heal leaps between allies, and Spirit Link Totem shares the group's fate through the worst of it.", embers:["#0070DE","#7dffae"]},
+  "lock_affliction":{title:"Death by Inches", desc:"An Affliction Warlock rots the pack slow — Agony and Corruption stack, Seed of Corruption blooms into the cluster, and the curses spread as the health drains drop by drop.", embers:["#9482C9","#ff8a3c"]},
+  "lock_demonology":{title:"Legion of the Damned", desc:"A Demonology Warlock opens the gate — demonic hordes swarm, Summon Demonic Tyrant empowers the legion, and Implosion detonates the pack in a single roar of fel.", embers:["#9482C9","#ff8a3c"]},
+  "lock_destruction":{title:"Burn It All", desc:"A Destruction Warlock calls the Infernal — Chaos Bolt pierces, Rain of Fire blankets the pack, and Cataclysm scorches the line as the gateway opens a shortcut through.", embers:["#9482C9","#ff8a3c"]},
+  "war_arms":{title:"For the Battle", desc:"An Arms Warrior raises the greatsword — Ravager erupts in a storm of steel, Colossus Smash exposes the wound, and Execute finishes the fight as the bleeds stack and the front line carves.", embers:["#C79C6E","#e6c264"]},
+  "war_fury":{title:"Bloodthirst", desc:"A Fury Warrior whirls into the pack — Raging Blow chains, Whirlwind cleaves, and Rampage surges as the rage builds and the bloodthirst never lets the blade rest.", embers:["#C79C6E","#ff8a3c"]},
+  "war_protection":{title:"Shield Wall", desc:"A Protection Warrior plants the shield — Ignore Pain soaks the hit, Shield Slam sustains the rage, and Shield Wall turns the group into a wall as the front holds the line.", embers:["#C79C6E","#e6c264"]}
 };
 function embersInto(el, count, colors){
   for(let i=0;i<count;i++){
@@ -543,20 +568,11 @@ function embersInto(el, count, colors){
     el.appendChild(s);
   }
 }
-// Per-spec overrides (optional). Add an entry to customize a spec's title/desc/embers.
-// The IMAGE is auto-used if the file cinematic-<classKey>-<specSlug>.jpg exists
-// (specSlug = spec name lowercased, spaces -> hyphens, e.g. "Beast Mastery" -> "beast-mastery").
-// Until that file exists, the class poster (cinematic-<classKey>.jpg) shows as fallback.
-// Example: HERO_SPEC["war_arms"] = { title:"Into the Fray", desc:"...", embers:["#C79C6E","#e6c264"] };
-const HERO_SPEC = {};
-
 function specSlug(spec){ return spec.toLowerCase().replace(/ /g,"-"); }
 function getHero(classKey, spec){
   const slug = specSlug(spec);
   const specId = classKey+"_"+slug;
-  const base = HERO_CLASS[classKey] || { title:"", desc:"", embers:["#e6c264"] };
-  const ov = HERO_SPEC[specId];
-  const h = ov ? Object.assign({}, base, ov) : base;
+  const h = HERO_SPEC[specId] || { title:spec, desc:"", embers:["#e6c264","#e6c264"] };
   return { specImg:`cinematic-${classKey}-${slug}.jpg`, classImg:`cinematic-${classKey}.jpg`,
            title:h.title, desc:h.desc, embers:h.embers };
 }
