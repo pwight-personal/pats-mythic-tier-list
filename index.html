@@ -130,7 +130,8 @@
     width:300px;max-width:80vw;background:#0b0f17;border:1px solid var(--gold-dim);border-radius:10px;
     padding:13px 14px;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
     box-shadow:0 12px 40px rgba(0,0,0,.7);font-size:12px;line-height:1.5;text-align:left}
-  .spec:hover .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+  .spec:hover .tip,.spec.tip-open .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+  .spec.tip-open{z-index:60}
   .tip .tname{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:3px}
   .tip .ttier{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:8px}
   .tip .why{color:#cfc6ad;margin-bottom:9px}
@@ -443,6 +444,15 @@ function selectRole(role){
 }
 btns.forEach(b=>b.addEventListener("click",()=>selectRole(b.dataset.role)));
 movePill(0);
+
+// ---- Mobile: tap-to-open tooltips (no layout change) ----
+document.addEventListener("click", function(e){
+  const spec = e.target.closest(".spec");
+  document.querySelectorAll(".spec.tip-open").forEach(s=>{
+    if(!spec || s!==spec) s.classList.remove("tip-open");
+  });
+  if(spec){ spec.classList.toggle("tip-open"); e.stopPropagation(); }
+});
 
 // ---- Cinematic ambient embers (overlay on the image) ----
 function embers(container, count, colors){
