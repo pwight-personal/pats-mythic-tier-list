@@ -1,0 +1,18 @@
+﻿# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# Editor / temp
+*.bak
+*.tmp
+*.log
+*.swp
+~$*
+
+# Backups of replaced art
+*.backup.*
+*.backup
