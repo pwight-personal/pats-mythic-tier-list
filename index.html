@@ -160,6 +160,25 @@
   .dcard .dkey{margin-top:10px;font-size:11px;color:var(--gold-dim);border-top:1px solid var(--border);padding-top:9px}
   .dcard .dkey b{color:var(--gold)}
 
+  /* ---- Methodology panel ---- */
+  .method{max-width:1100px;margin:0 auto 30px;padding:0 16px}
+  details.method-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  details.method-box>summary{cursor:pointer;list-style:none;padding:16px 18px;font-size:14px;font-weight:700;
+    color:var(--gold);letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;
+    user-select:none}
+  details.method-box>summary::-webkit-details-marker{display:none}
+  details.method-box>summary .chev{color:var(--text-dim);transition:transform .25s;font-size:13px}
+  details.method-box[open]>summary .chev{transform:rotate(90deg)}
+  details.method-box>summary:hover{background:var(--panel-2)}
+  .method-body{padding:4px 18px 20px;color:#b3ab92;font-size:12.5px;line-height:1.65}
+  .method-body h4{color:var(--gold);font-size:13px;letter-spacing:1px;margin:16px 0 6px;text-transform:uppercase}
+  .method-body h4:first-child{margin-top:4px}
+  .method-body ul{margin:0 0 6px 0;padding-left:20px}
+  .method-body li{margin-bottom:4px}
+  .method-body b{color:#d9cfb8}
+  .method-body a{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold-dim)}
+  .method-body .note{color:var(--text-dim);font-style:italic;margin-top:10px}
+
   @media(max-width:640px){
     .cinematic{height:240px}
     .hero .label b{font-size:22px}
@@ -231,6 +250,71 @@
   +25% player health / enemy damage system, DPS cooldown smoothing, and per-spec reworks (notably
   Marksmanship Hunter, Protection Paladin, Restoration Druid, Elemental Shaman &amp; Unholy Death Knight).
   PTR numbers are <b>not final</b> and will shift before launch. Bring the better player, not just the better spec.
+</div>
+
+<!-- Methodology & Sources -->
+<div class="method">
+<details class="method-box">
+  <summary>Methodology &amp; Sources &mdash; how these rankings were built <span class="chev">&#9654;</span></summary>
+  <div class="method-body">
+
+    <h4>What this is</h4>
+    The tier lists are a <b>Season 2 projection</b> &mdash; a forward estimate from announced changes, not live
+    performance data (Season 2 isn't out yet). PTR numbers are <b>not final</b> and will shift before launch.
+
+    <h4>Sources</h4>
+    <ul>
+      <li><b>End-of-Season-1 baseline:</b> Icy Veins Mythic+ tier lists for DPS, Tank &amp; Healer
+        (Patch 12.0.7, updated July 2026, by Petko).</li>
+      <li><b>Season 2 class changes:</b> Patch 12.1 PTR tuning &mdash; Icy Veins PTR posts and a full
+        per-spec breakdown of the first PTR build.</li>
+      <li><b>Dungeon pool:</b> Blizzard's Season 2 dungeon design article + the July 21 tuning notes.</li>
+    </ul>
+
+    <h4>Method &mdash; three layers</h4>
+    <ul>
+      <li><b>1. Season 1 baseline.</b> Every spec starts from its end-of-Season-1 tier (toolkit, damage
+        profile, survivability, utility).</li>
+      <li><b>2. Three combat-wide system shifts in 12.1:</b>
+        <ul>
+          <li><b>+25% player health &amp; enemy damage</b> &rarr; rewards sustain/durability, penalizes
+            glass-cannon burst and twitch-healing.</li>
+          <li><b>Cooldown smoothing</b> (power out of burst windows into filler) &rarr; steady-damage specs
+            gain relative value.</li>
+          <li><b>DPS role-share emphasis</b> (bigger enemy HP, priority targeting, damage checks) &rarr;
+            strong priority/funnel damage gets a bump.</li>
+        </ul>
+      </li>
+      <li><b>3. Per-spec PTR changes.</b> Each spec's specific 12.1 tuning/rework moves it up, down, or holds
+        it based on whether the changes are a net buff, nerf, or rework toward consistency.</li>
+    </ul>
+
+    <h4>Example calls</h4>
+    <ul>
+      <li><b>Protection Paladin A&rarr;A+:</b> largest tank rework (+100% Judgment/Consecration, +150% SotR,
+        +30% Avenger's Shield, Blessed Word, +20% HP Ardent Defender) fixes S1's squishiness.</li>
+      <li><b>Restoration Druid B&rarr;A+:</b> widest healer rework (Overgrowth, Flash of Clarity, redesigned
+        Innervate, Tree of Life, broad healing buffs + mana cuts).</li>
+      <li><b>Marksmanship Hunter C&rarr;A:</b> biggest single-spec overhaul (Explosive Shot rework, core
+        +20%, auto-shot +600%, Hunter's Mark on 5 targets).</li>
+      <li><b>Elemental Shaman &rarr;A+:</b> Ascendance de-emphasized but core spells +30&ndash;60% &mdash;
+        far more consistent, which the smoothing era favors.</li>
+      <li><b>Blood Death Knight C&rarr;B:</b> big survivability sweep synergizes with the +25% health system.</li>
+    </ul>
+
+    <h4>Limitations</h4>
+    <ul>
+      <li><b>Projection, not measurement.</b> Reasoning forward from announced changes; revisit once live
+        log data exists.</li>
+      <li><b>PTR is a first build.</b> Blizzard has said they will watch and adjust before launch.</li>
+      <li><b>Tier boundaries involve judgment.</b> A+ vs A (and A vs B) are calls; a few specs could sit one
+        tier differently and be defensible.</li>
+      <li><b>Scope:</b> average/intermediate key-level meta, not PvP, raid, or high-key-only outliers.</li>
+    </ul>
+
+    <p class="note">As always &mdash; bring the better player, not just the better spec.</p>
+  </div>
+</details>
 </div>
 
 <footer>Pat's Mythic Tier List &middot; Fan-made &middot; World of Warcraft &amp; all class art &copy; Blizzard Entertainment</footer>
