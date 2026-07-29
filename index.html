@@ -1,0 +1,467 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pat's Mythic Tier List - Season 2</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<style>
+  :root{
+    --gold:#e6c264;
+    --gold-dim:#8a7440;
+    --bg:#07090d;
+    --panel:#11161f;
+    --panel-2:#161c27;
+    --border:#2a3346;
+    --text:#d9cfb8;
+    --text-dim:#8b8266;
+    --t-s:#ff7f3f;     --t-s-bg:rgba(255,127,63,.16);
+    --t-ap:#ffce5a;    --t-ap-bg:rgba(255,206,90,.14);
+    --t-a:#9ad36b;     --t-a-bg:rgba(154,211,107,.14);
+    --t-b:#5ab0e6;     --t-b-bg:rgba(90,176,230,.14);
+    --t-c:#b48ce6;     --t-c-bg:rgba(180,140,230,.14);
+    --dk:#C41F3B; --dh:#A330C9; --druid:#FF7D0A; --evoker:#33937F;
+    --hunter:#ABD473; --mage:#69CCF0; --monk:#00FF96; --pal:#F58CBA;
+    --priest:#FFFFFF; --rogue:#FFF569; --shaman:#0070DE; --lock:#9482C9; --war:#C79C6E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,sans-serif;min-height:100vh}
+  a{color:var(--gold)}
+
+  /* ---- Header ---- */
+  header{text-align:center;padding:34px 16px 6px;position:relative}
+  .crest{font-size:34px;letter-spacing:2px;color:var(--gold);
+    text-shadow:0 0 18px rgba(230,194,100,.45),0 2px 0 #000;
+    font-weight:800;text-transform:uppercase}
+  .crest .sub{display:block;font-size:14px;color:var(--text-dim);letter-spacing:6px;margin-top:6px;font-weight:600}
+  .tagline{margin-top:10px;color:var(--text-dim);font-size:13px}
+  .tagline b{color:var(--gold)}
+
+  /* ---- Role switch (slider) ---- */
+  .role-switch{display:flex;justify-content:center;gap:0;margin:22px auto 0;max-width:560px;
+    background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:6px;position:relative}
+  .role-btn{flex:1;padding:13px 10px;border:none;background:transparent;color:var(--text-dim);
+    font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:8px;
+    transition:color .25s,background .35s;text-transform:uppercase;position:relative;z-index:2}
+  .role-btn.active{color:#0a0a0a}
+  .slider-pill{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/3);
+    background:linear-gradient(135deg,var(--gold),#c79a3a);border-radius:8px;
+    transition:transform .4s cubic-bezier(.5,1.6,.5,1);box-shadow:0 4px 16px rgba(230,194,100,.4);z-index:1}
+
+  /* ---- Cinematic hero ---- */
+  .cinematic{height:340px;margin:26px auto 0;max-width:1100px;border-radius:14px;overflow:hidden;
+    position:relative;border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.55)}
+  .hero{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;display:flex;align-items:flex-end;
+    padding:30px}
+  .hero.show{opacity:1}
+  .hero .scene{position:absolute;inset:0;z-index:0}
+  .hero .label{position:relative;z-index:3;font-size:13px;letter-spacing:5px;text-transform:uppercase;
+    color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8);font-weight:700}
+  .hero .label b{display:block;font-size:30px;letter-spacing:2px;margin-top:6px;font-weight:800}
+  .hero .flavor{position:relative;z-index:3;color:#e7e1d2;font-size:14px;margin-top:10px;max-width:520px;
+    text-shadow:0 2px 8px rgba(0,0,0,.9)}
+
+  /* scene backgrounds per role */
+  .scene-dps{background:
+     linear-gradient(115deg, rgba(8,6,16,.78), rgba(8,6,16,.25) 55%, rgba(8,6,16,.72)),
+     url('cinematic-dps.jpg') center/cover no-repeat,
+     linear-gradient(160deg,#1a0f2a,#0a0a14 70%);}
+  .scene-tank{background:
+     linear-gradient(115deg, rgba(6,9,14,.78), rgba(6,9,14,.25) 55%, rgba(6,9,14,.72)),
+     url('cinematic-tank.jpg') center/cover no-repeat,
+     linear-gradient(160deg,#0c1a2a,#07090d 70%);}
+  .scene-healer{background:
+     linear-gradient(115deg, rgba(6,10,8,.78), rgba(6,10,8,.25) 55%, rgba(6,10,8,.72)),
+     url('cinematic-healer.jpg') center/cover no-repeat,
+     linear-gradient(160deg,#0a1a14,#07090d 70%);}
+
+  /* animated "character" silhouette-ish shapes */
+  .fig{position:absolute;z-index:2;filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
+  .spark{position:absolute;border-radius:50%;pointer-events:none;z-index:2}
+  @keyframes float-up{0%{transform:translateY(0) scale(1);opacity:.9}100%{transform:translateY(-220px) scale(.3);opacity:0}}
+  @keyframes swing{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(18deg)}}
+  @keyframes pulse-glow{0%,100%{opacity:.5;filter:blur(14px)}50%{opacity:.9;filter:blur(22px)}}
+  @keyframes shield-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes cast-ring{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.8);opacity:0}}
+
+  /* ---- Tier list ---- */
+  .tier-wrap{max-width:1100px;margin:30px auto 40px;padding:0 16px}
+  .tier-row{display:flex;align-items:stretch;margin-bottom:12px;border:1px solid var(--border);
+    border-radius:10px;background:var(--panel)}
+  .tier-label{width:84px;flex:0 0 84px;display:flex;align-items:center;justify-content:center;
+    font-size:30px;font-weight:900;letter-spacing:1px;text-align:center;position:relative;
+    border-radius:9px 0 0 9px}
+  .tier-label span{position:relative;z-index:2}
+  .tier-label::after{content:"";position:absolute;inset:0;opacity:.18}
+  .tier-s{color:var(--t-s)} .tier-s::after{background:var(--t-s)}
+  .tier-ap{color:var(--t-ap)} .tier-ap::after{background:var(--t-ap)}
+  .tier-a{color:var(--t-a)} .tier-a::after{background:var(--t-a)}
+  .tier-b{color:var(--t-b)} .tier-b::after{background:var(--t-b)}
+  .tier-c{color:var(--t-c)} .tier-c::after{background:var(--t-c)}
+  .tier-body{flex:1;padding:12px;display:flex;flex-wrap:wrap;gap:10px;background:var(--panel-2);
+    border-radius:0 9px 9px 0}
+  .tier-body.empty{color:var(--text-dim);font-style:italic;font-size:13px;align-items:center}
+
+  .spec{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border-radius:8px;
+    background:#0e131b;border:1px solid var(--border);font-size:13.5px;font-weight:600;
+    transition:transform .15s,box-shadow .2s;cursor:default}
+  .spec:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.5);z-index:60}
+  .spec .dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 8px currentColor}
+  .spec .cls{color:var(--text-dim);font-size:11px;letter-spacing:.5px}
+  .spec .name{color:var(--text)}
+  .spec .cicon{width:18px;height:18px;border-radius:50%;flex:0 0 auto;object-fit:cover;
+    border:1px solid rgba(0,0,0,.45)}
+
+  .role-panel{display:none}
+  .role-panel.show{display:block;animation:fadein .45s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .disclaimer{max-width:1100px;margin:0 auto 30px;padding:0 16px;color:var(--text-dim);font-size:12px;
+    line-height:1.6;text-align:center}
+  .disclaimer b{color:var(--gold)}
+  footer{text-align:center;padding:24px;color:var(--text-dim);font-size:12px;border-top:1px solid var(--border)}
+  .patch{display:inline-block;background:var(--panel);border:1px solid var(--border);color:var(--gold);
+    padding:3px 10px;border-radius:20px;font-size:11px;margin-left:8px;letter-spacing:1px}
+
+  /* ---- Tooltip ---- */
+  .spec{position:relative}
+  .tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(6px);
+    width:300px;max-width:80vw;background:#0b0f17;border:1px solid var(--gold-dim);border-radius:10px;
+    padding:13px 14px;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+    box-shadow:0 12px 40px rgba(0,0,0,.7);font-size:12px;line-height:1.5;text-align:left}
+  .spec:hover .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+  .tip .tname{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:3px}
+  .tip .ttier{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:8px}
+  .tip .why{color:#cfc6ad;margin-bottom:9px}
+  .tip .util-h{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:4px}
+  .tip .util{color:#aeb6c4}
+  .tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:#0b0f17}
+  .tip::before{content:"";position:absolute;top:calc(100% + 1px);left:50%;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:var(--gold-dim);z-index:-1}
+
+  /* ---- Dungeon pool ---- */
+  .section-title{max-width:1100px;margin:46px auto 6px;padding:0 16px;text-align:center}
+  .section-title h2{color:var(--gold);font-size:22px;letter-spacing:3px;text-transform:uppercase;font-weight:800}
+  .section-title p{color:var(--text-dim);font-size:13px;margin-top:6px}
+  .dungeons{max-width:1100px;margin:18px auto 30px;padding:0 16px;display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .dcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;
+    transition:transform .18s,box-shadow .2s,border-color .2s}
+  .dcard:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.6);border-color:var(--gold-dim)}
+  .dcard .dh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+  .dcard .dname{font-size:16px;font-weight:800;color:var(--text)}
+  .dtag{font-size:9.5px;letter-spacing:1px;padding:3px 8px;border-radius:20px;text-transform:uppercase;font-weight:700}
+  .dtag.new{background:rgba(180,140,230,.18);color:#c9a6f0;border:1px solid rgba(180,140,230,.4)}
+  .dtag.ret{background:rgba(90,176,230,.15);color:#7fc2ee;border:1px solid rgba(90,176,230,.4)}
+  .dcard .dnote{color:#b3ab92;font-size:12.5px;line-height:1.55}
+  .dcard .dkey{margin-top:10px;font-size:11px;color:var(--gold-dim);border-top:1px solid var(--border);padding-top:9px}
+  .dcard .dkey b{color:var(--gold)}
+
+  @media(max-width:640px){
+    .cinematic{height:240px}
+    .hero .label b{font-size:22px}
+    .tier-label{width:60px;flex-basis:60px;font-size:22px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="crest">Pat's Mythic Tier List <span class="sub">Season 2</span></div>
+  <div class="tagline">World of Warcraft &middot; Midnight <span class="patch">Patch 12.1 PTR</span></div>
+</header>
+
+<div class="role-switch" id="roleSwitch">
+  <div class="slider-pill" id="pill"></div>
+  <button class="role-btn active" data-role="dps">DPS</button>
+  <button class="role-btn" data-role="tank">Tank</button>
+  <button class="role-btn" data-role="healer">Healer</button>
+</div>
+
+<!-- Cinematic hero -->
+<div class="cinematic" id="cinematic">
+  <div class="hero show" data-role="dps">
+    <div class="scene scene-dps"></div>
+    <div id="dps-fx"></div>
+    <div>
+      <div class="label"><b>Into the Fray</b></div>
+      <div class="flavor">A Devourer Demon Hunter channels Void Metamorphosis, souls spiraling inward before Collapsing Star tears through the pack. The cooldown-smoothing of 12.1 keeps the chaos steady &mdash; burst still bites, but the filler between bites now draws blood.</div>
+    </div>
+  </div>
+  <div class="hero" data-role="tank">
+    <div class="scene scene-tank"></div>
+    <div id="tank-fx"></div>
+    <div>
+      <div class="label"><b>Bulwark Unbroken</b></div>
+      <div class="flavor">A Guardian Druid plants wide in bear form, Ironfur layering as Rage spenders feed Gory Fur &mdash; each making the other free. With player health and enemy damage both up 25%, the steady wall holds where the spiky glass cannon cracks.</div>
+    </div>
+  </div>
+  <div class="hero" data-role="healer">
+    <div class="scene scene-healer"></div>
+    <div id="healer-fx"></div>
+    <div>
+      <div class="label"><b>Hands of Renewal</b></div>
+      <div class="flavor">A Mistweaver Monk weaves Soothing Mist through the party, Mastery: Gust of Mists now amplified 50%. The 25% health pool turns frantic twitch-healing into deliberate triage &mdash; breathe, plan, and let the steady hands carry the key.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tier panels -->
+<div class="tier-wrap">
+
+  <div class="role-panel show" data-role="dps" id="panel-dps"></div>
+  <div class="role-panel" data-role="tank" id="panel-tank"></div>
+  <div class="role-panel" data-role="healer" id="panel-healer"></div>
+
+</div>
+
+<!-- Dungeon pool -->
+<div class="section-title">
+  <h2>Season 2 Dungeon Pool</h2>
+  <p>Eight dungeons &middot; 5 new Midnight instances + 3 returning classics, all retuned for Patch 12.1</p>
+</div>
+<div class="dungeons" id="dungeons"></div>
+
+<div class="disclaimer">
+  <b>How this list was built:</b> Rankings are a <b>Season 2 projection</b>, combining the end-of-Season-1
+  standings (Icy Veins, Patch 12.0.7) with the <b>Patch 12.1 PTR</b> class changes &mdash; including the
+  +25% player health / enemy damage system, DPS cooldown smoothing, and per-spec reworks (notably
+  Marksmanship Hunter, Protection Paladin, Restoration Druid, Elemental Shaman &amp; Unholy Death Knight).
+  PTR numbers are <b>not final</b> and will shift before launch. Bring the better player, not just the better spec.
+</div>
+
+<footer>Pat's Mythic Tier List &middot; Fan-made &middot; World of Warcraft &amp; all class art &copy; Blizzard Entertainment</footer>
+
+<script>
+const COLORS = {
+  dk:"#C41F3B", dh:"#A330C9", druid:"#FF7D0A", evoker:"#33937F", hunter:"#ABD473",
+  mage:"#69CCF0", monk:"#00FF96", pal:"#F58CBA", priest:"#FFFFFF", rogue:"#FFF569",
+  shaman:"#0070DE", lock:"#9482C9", war:"#C79C6E"
+};
+const C = (cls)=>COLORS[cls];
+
+// ---- Spec rationale + utility (Season 2 projection) ----
+const SPECS = {
+"Unholy":{why:"Major Midnight rework: no Festering Wound, smart disease spread, Lesser Ghouls + Putrefy. 12.1 reins in summon density (Army&rarr;8 Lesser Ghouls, Lord of the Dead) but compensates with +20% Necrotic Coil/Graveyard. Top burst plus unmatched utility keeps it S.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Asphyxiate (5s stun), Blinding Sleet"},
+"Devourer":{why:"Newest ranged-ish DPS: build Fury, spend it, collect souls for Void Metamorphosis &amp; Collapsing Star. 12.1 cuts Meta Mastery bonus 66% but +20% to all ability damage &mdash; smoother and far less burst-reliant, ideal for the cooldown-smoothing era.",util:"Chaos Brand (+3% magic), Darkness (avoid chance), Sigil of Misery, Consume Magic"},
+"Augmentation":{why:"Support DPS whose ally-buffing output is at a record high. 12.1 is pure QoL: Upheaval no longer knocks enemies up (no accidental CC), and Ebon Might crit state is easier to track. Always wanted in a key.",util:"Blessing of the Bronze, Prescience, Oppressing Roar (AoE enrage remove), Zephyr, Source of Magic, Spatial Paradox"},
+"Arms":{why:"Heroic Strike proc juggling into Slam, plus the new Mass Execution execute. 12.1 buffs Ravager (+50% dmg, +25% Bleed taken for 12s) and drops Demolish to a 30s CD &mdash; strong, steady, great utility.",util:"Rallying Cry, Battle Shout, Intimidating Shout (uncapped), Champion's Spear (grip), Piercing Howl"},
+"Retribution":{why:"QoL rotation flow with power shifted into Final Verdict &amp; Divine Storm. 12.1 smoothing: core strikes +50%, Avenging Wrath 20%&rarr;15%, Skyfury warping removed. Feels better and hits consistently.",util:"Devotion Aura (-3% raid dmg), Lay on Hands, Blessing of Sacrifice/Protection/Freedom, Intercession (CR)"},
+"Beast Mastery":{why:"Newcomer-friendly with min-max via Hero talents. 12.1 is a big buff: Kill Command/Cobra/Barbed Shot up, Beast Cleave extended to 10s (100% AoE uptime), auto-shot +600%, Hunter's Mark now hits 5 targets. Could push toward S.",util:"Hunter's Mark, Tranquilizing Shot (enrage+magic), Freezing Trap, Roar of Sacrifice, Misdirection"},
+"Enhancement":{why:"Reworked to shed button bloat, Crash Lightning at the core. Strong priority-target + on-demand funnel. 12.1 adds defensive bumps (Healing Surge/Earth Shield +25%). A safe, consistent melee pick.",util:"Skyfury, Bloodlust, Capacitor Totem, Wind Rush Totem (mass freedom), Purge, Earthgrab Totem"},
+"Elemental":{why:"Reworked &amp; pruned to Lightning Bolt/Chain Lightning + Earthquake/Elemental Blast. 12.1 is a major shift: Lava Burst &amp; Lightning Bolt +30%, Chain Lightning +60%, Flame Shock +60%, while Ascendance's Overload bonus drops 75%&rarr;30% &mdash; much more consistent, less burst-reliant.",util:"Skyfury, Bloodlust, Earth Elemental, Earthquake (knockdown), Thunderstorm (knockback), Purge"},
+"Outlaw":{why:"Lower barrier to entry: no Stealth/Crackshot windows to juggle. 12.1 frees off-hand dagger optimization and buffs Killing Spree +60%. Strong, flexible melee with the best rogue utility.",util:"Shroud of Concealment, Tricks of the Trade, Kidney Shot, Shiv (enrage dispel), Atrophic Poison (-4% enemy dmg)"},
+"Feral":{why:"Reworked to cut snapshotting and remove Bloodtalons. 12.1 opens build diversity: Chomp +30%, Saber Jaws 50%&rarr;60%, making Chomp builds competitive. Bursty with fewer energy issues.",util:"Mark of the Wild (+3% versa), Stampeding Roar, Soothe (enrage dispel), Typhoon, Ursol's Vortex"},
+"Shadow":{why:"Reworked: Shadow Word: Madness, Tentacle Slam. Great priority damage during AoE. 12.1 adds Shadeburst (new AoE, less Psychic Link reliance), limited-use Void Volley, redesigned Improved Voidform.",util:"Power Infusion, Power Word: Fortitude, Mass Dispel, Mind Soothe (skip aid), Vampiric Embrace"},
+"Survival":{why:"Reworked to dual-wield with a pruned core and combined Takedown. Strong sustained damage. 12.1 adds Razor Edge (+10% crit &amp; crit damage on core strikes).",util:"Hunter's Mark, Tranquilizing Shot, Freezing Trap, Binding Shot (AoE root), Roar of Sacrifice"},
+"Havoc":{why:"Trimmed spells, Glaive Tempest made passive, 2x Blur charges. 12.1 adds Never Say Die (+3% dmg above 50% HP, +5% Leech below) &mdash; nice survivability scaling.",util:"Chaos Brand, Darkness, Sigil of Misery, Consume Magic"},
+"Fury":{why:"Big utility package in Midnight (extra interrupt, uncapped Intimidating Shout, ally speed). 12.1 gives Whirlwind a single-target role + Carving Blades (+50% ST). Still target-capped on big pulls.",util:"Rallying Cry, Battle Shout, Intimidating Shout (uncapped), Piercing Howl, Champion's Spear"},
+"Frost":{why:"Complete rework: manage Freezing Stacks, Ray of Frost is the major CD, Glacial Spike baked into Frostbolt. 12.1: +4% damage, Glacial Bulwark loses extra Ice Barrier, Hand of Frost Apex reined in to curb burst.",util:"Arcane Intellect, Spellsteal, Remove Curse, Ring of Frost, permanent slow"},
+"Subtlety":{why:"Heavy pruning &mdash; near a 2-button AoE spec. Great short-CD on-demand burst. 12.1 trims resource generation during CDs to stop overcapping (Relentless Strikes 5&rarr;4).",util:"Shroud of Concealment, Tricks of the Trade, Kidney Shot, Shiv, Distract"},
+"Windwalker":{why:"Reworked with a combined Zenith CD, but still target-capped on big pulls. 12.1 is a big smoothing pass: Tiger Palm +200%, Blackout Kick +50%, auto-attacks +30%, while Zenith Stomp/Weapon of Wind/Tigereye Brew are cut &mdash; much steadier filler damage.",util:"Mystic Touch (+5% phys), Leg Sweep, Ring of Peace, Paralysis (stun+enrage dispel), Tiger's Lust"},
+"Assassination":{why:"QoL: Crimson Tempest now spreads bleeds, no Shiv-for-damage, less Stealth dependence. 12.1 energy-economy pass, Deathmark 100%&rarr;75%, new Unstable Toxin. Energy starvation still the main concern.",util:"Shroud of Concealment, Tricks, Iron Wire (Garrote silence), Shiv, Kidney Shot"},
+"Balance":{why:"Eclipse is now an active button to manage. 12.1 rework toward building/spending/pooling Astral Power: Starsurge &amp; Starfall +10%, all damage +4%, Stellar Protection passive &mdash; more deliberate ramp.",util:"Mark of the Wild, Solar Beam (8s AoE silence), Typhoon, Soothe, Ursol's Vortex"},
+"Frost_Death_Knight":{why:"Minor Midnight changes; Frostwyrm's Fury is a must-pick via Apex. High burst + high durability. 12.1: Permafrost shield 30%&rarr;35%.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Asphyxiate, Control Undead"},
+"Marksmanship":{why:"Only Hunter with Kill Shot; slower, harder-hitting Aimed Shot. 12.1 is the biggest single-spec overhaul: Explosive Shot redesigned into a recastable repeater, Headshot/Double Tap removed, core abilities +20%, auto-shot +600%, Hunter's Mark 5 targets &mdash; a major lift out of C-tier.",util:"Hunter's Mark, Tranquilizing Shot, Freezing Trap, Roar of Sacrifice, Binding Shot"},
+"Demonology":{why:"QoL utility via Grimoire: Imp Lord/Fel Ravager adding interrupt/dispel. Implosion now on a CD. 12.1: light changes this build. Solid AoE, weaker single-target.",util:"Healthstone, Soulstone (CR), Demonic Gateway, Blight of Weakness/Tongues, Shadowfury (AoE stun)"},
+"Arcane":{why:"Evocation reworked (no longer offensive), stronger Touch of the Magi, new Arcane Pulse. 12.1: new Apex Prismatic Bolt (AoE nuke off Arcane Barrage), Arcane Pulse redesigned into a real AoE event.",util:"Arcane Intellect, Spellsteal, Remove Curse, Ring of Frost, Improved Warding (-4% AoE dmg)"},
+"Devastation":{why:"Flameshaper wins the Hero rework (Consume Flame). Bursty and strong in AoE, squishier in Midnight. 12.1: new Unbound Flame capstone (instant AoE nuke after Dragonrage ends), Risen Fury streamlined.",util:"Blessing of the Bronze, Wing Buffet (pushback), Expunge (poison), Zephyr, Cauterizing Flame (bleed)"},
+"Affliction":{why:"Reworked back toward Seed of Corruption (AoE) + Unstable Affliction (ST), Legion-like flow. 12.1: light this build. Smooth but lower throughput.",util:"Healthstone, Soulstone, Demonic Gateway, Curse of Tongues/Weakness, Banish, Singe Magic (Imp)"},
+"Destruction":{why:"Apex talents + Roaring Blaze QoL for Immolate/Wither. Good AoE, struggles on pure single-target. 12.1: Conflagration of Chaos redesigned &mdash; Conflagrate &amp; Shadowburn always crit and scale with crit.",util:"Healthstone, Soulstone, Demonic Gateway, Shadowfury, Blight of Tongues/Weakness"},
+"Fire":{why:"Rework: Combustion is a flat 1-min CD, damage baked into beefier Flamestrike/Pyroblast. The most CD-reliant spec in the game &mdash; weak outside Combustion. 12.1: Pyroblast/Flamestrike +15%, Fired Up retuned for steady damage.",util:"Arcane Intellect, Spellsteal, Remove Curse, Dragon's Breath, Improved Warding"},
+// Tanks
+"Guardian":{why:"Less spammy (Thorns of Iron gone), great sustain &amp; durability, low barrier to entry. 12.1: Lunation is now a flat 20s Lunar Beam CD reduction, and Gory Fur makes Ironfur &amp; Rage spenders feed each other for free &mdash; excellent with the +25% health system.",util:"Mark of the Wild, Stampeding Roar, Soothe (enrage dispel), Ursol's Vortex, Incapacitating Roar"},
+"Brewmaster":{why:"Pruned to 4-6 core abilities; Stagger + Purifying Brew remains the identity. Highest tank damage and one of the tankiest. 12.1: Staggering Strikes Stagger reduction +25%, Celestial Brew/Infusion absorbs +25%, Vital Flame 40%&rarr;50%.",util:"Mystic Touch (+5% phys), Leg Sweep, Ring of Peace, Paralysis, Detox"},
+"Protection_Paladin":{why:"S1's squishiest tank (no solid CD reduction). 12.1 is the largest tank rework: Judgment &amp; Consecration +100%, Shield of the Righteous +150%, Avenger's Shield +30%, Avenging Wrath throughput cut, Blessed Word (80% overhealing becomes absorb), Improved Ardent Defender (+20% HP). Damage and survivability both leap.",util:"Devotion Aura, Lay on Hands, Blessing of Spellwarding/Sacrifice/Protection/Freedom, Avenger's Shield (silence), Intercession"},
+"Vengeance":{why:"Complete rework: best tank Apex talents, improved Metamorphosis, target caps lifted on Soul Cleave. Super tanky with great AoE. 12.1: Soul Cleave &amp; Fel Devastation +25%, Frailty 8%&rarr;10%, Feast of Souls +25%.",util:"Chaos Brand, Darkness, Sigil of Silence, Sigil of Chains (grip), Sigil of Misery, Consume Magic"},
+"Protection_Warrior":{why:"Core unchanged; lower APM from haste/Anger Management nerfs, recent buffs helped. 12.1: Ignore Pain absorb +25%, Bloodborne now boosts all Bleeds, Ravager reworked (+50% dmg, +25% bleed taken).",util:"Rallying Cry, Battle Shout, Shockwave, Intimidating Shout (uncapped), Spell Reflection"},
+"Blood":{why:"Lowest barrier to entry ever; weaker/shorter Dancing Rune Weapon. 12.1 is a big survivability sweep: Permafrost 40%&rarr;50%, Voracious 12%&rarr;15% Leech, Rapid Decomposition 50%&rarr;85%, +25% healing across the kit &mdash; the +25% health system rewards all that self-sustain.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Gorefiend's Grasp (mass grip), Asphyxiate"},
+// Healers
+"Mistweaver":{why:"Strong healing profile; Jadefire Teachings now passive. 12.1 is a Mastery push: Gust of Mists +50% (all healing -3%, power moved out of Spinning Crane Kick into Ancient Teachings), new Vital Expenditure talent. Weakest externals but top HPS.",util:"Mystic Touch, Life Cocoon, Revival (mass dispel), Leg Sweep, Ring of Peace, Paralysis"},
+"Restoration_Shaman":{why:"Totally redesigned around Riptide/Chain Heal/Healing Wave/Healing Rain. The ONLY healer with an interrupt. 12.1: Healing Rain gains a 12s CD / 18s duration for flexible placement. Retains nearly all group utility.",util:"Skyfury, Bloodlust, Spirit Link Totem, Capacitor Totem, Wind Rush Totem, Purge, Earth Elemental"},
+"Discipline":{why:"Pruned rotation, easier CD management, but S1 healing output was weak. 12.1 rework: Grim Deliverance, Shadow Mend becomes a passive Flash Heal upgrade, deterministic Void Shield, Smite +40%, Penance no longer applies Atonement on allies &mdash; more consistent damage-driven healing.",util:"Pain Suppression, Power Word: Barrier, Power Infusion, Power Word: Fortitude, Mass Dispel"},
+"Restoration_Druid":{why:"Pruned to 1 Lifebloom + Power of the Archdruid; top HoT performance. 12.1 is the widest healer rework: Overgrowth, Flash of Clarity, Innervate redesigned (25% mana regen), Tranquility grows protective roots, Tree of Life casts Regrowth on 3, broad healing buffs + mana-cost cuts.",util:"Mark of the Wild, Ironbark (external DR), Innervate, Stampeding Roar, Soothe, Remove Corruption"},
+"Holy_Paladin":{why:"Rework around Holy Shock (no Crusader Strike), lower Avenging Wrath CD, Light of Dawn baseline 40-yard. Better HPS outside major CDs. 12.1: healing talents +25% (Golden Path, Lightforged Blessing, Rite of Adjuration).",util:"Devotion Aura, Lay on Hands, Intercession (CR), Blessing of Sacrifice/Protection/Freedom, Hammer of Justice"},
+"Preservation":{why:"Reworked toward Verdant Embrace/Dream Breath/Echo/Reversion; easier for newcomers. 12.1: Dream Breath becomes flexible (instant -50%, periodic +118%), Merithra's Blessing reworked to boost all of its healing.",util:"Blessing of the Bronze, Rewind (33% damage rewind), Expunge (poison), Zephyr, Cauterizing Flame, Rescue"},
+"Holy_Priest":{why:"Focus on Holy Word + Prayer of Healing/Mending/Flash Heal. Highest healer damage, but weak AoE healing drags it down. 12.1: Divine Hymn now also grants Guardian Spirit while channeled.",util:"Guardian Spirit (cheat death), Power Infusion, Power Word: Fortitude, Mass Dispel, Psychic Scream"}
+};
+
+// ---- Season 2 dungeon pool ----
+const DUNGEONS = [
+ ["Altar of Fangs","new","New Midnight instance tied to the troll/snake/Curse of Ul'atek theme. Fresh layout with no legacy pain points to fix &mdash; built for modern M+ pacing.","New Midnight dungeon"],
+ ["Murder Row","new","Cantina event reworked: more progress from success, far less loss on failure, no job switching. Caster density after Zaen Bladesorrow cut, and several casts removed from Corrupted Warlocks/Fel Hunters/Neophytes.","Cantina event &amp; caster spam fixed"],
+ ["Den of Nalorakk","new","Winter gauntlet pacing eased and made easier to navigate. Sentinel of Winter's Eternal Winter no longer grants an absorb and channels a fixed duration (scales into high keys). RP sequences resolve quicker. Avatar of Starvation's debuff now has a 5s cast; Pulverize no longer stuns.","Gauntlet &amp; RP pacing improved"],
+ ["Voidscar Arena","new","Routing reworked: pre-first-boss split into melee-left / caster-right, each side a miniboss granting a unique stat buff. Taz'Rah fully reworked. New Domanaar lieutenants gate the Charonus encounter; Charonus mechanics retuned for better interaction.","Routing &amp; both bosses reworked"],
+ ["The Blinding Vale","new","Pickup-group pain points addressed: Ikuzz summons fewer Bloodthorn Roots; Ziekket's Lashers have less health and the Lightbloom Essence fail bug fixed. Caster density per pack reduced across the dungeon.","Ikuzz/Ziekket &amp; caster density fixed"],
+ ["Kings' Rest","ret","Returning BfA classic. Council of Tribes now a fixed order (Kula &rarr; Aka'alil &rarr; Zanazal) so no more punishing weeks. Shadow of Zul retuned to modern standards. Dazar, the First King fully reworked with new abilities. RP resolves quicker.","Council fixed order, Dazar reworked"],
+ ["Temple of Sethraliss","ret","Returning BfA classic, heavily reworked. Adderis/Aspix shields now swap on a health threshold (damage resist, not reflect). Merektha re-emerges only after her adds die. Gauntlet de-bugged (no more 'timeout' orb). Final encounter now needs full-group healing participation.","Adderis/Aspix, Merektha &amp; Avatar reworked"],
+ ["Ruby Life Pools","ret","Returning Dragonflight dungeon. First-section packs removed; Thunderhead/Flamegullet patrols moved to the ground. Tectonic Slam decluttered; Melidrussa slowed down. Kyrakka's Flaming Embers no longer applies Infernocore; Kokia's Ritual now marks its target first. Timer cut to 28 min.","Pulls thinned, patrols grounded, bosses retuned"]
+];
+
+// spec: [className, specName, classKey]
+const DATA = {
+  dps:{
+    "S":[
+      ["Death Knight","Unholy","dk"],
+      ["Demon Hunter","Devourer","dh"],
+      ["Evoker","Augmentation","evoker"]
+    ],
+    "A+":[
+      ["Warrior","Arms","war"],
+      ["Paladin","Retribution","pal"],
+      ["Hunter","Beast Mastery","hunter"],
+      ["Shaman","Enhancement","shaman"],
+      ["Shaman","Elemental","shaman"],
+      ["Rogue","Outlaw","rogue"],
+      ["Druid","Feral","druid"],
+      ["Priest","Shadow","priest"]
+    ],
+    "A":[
+      ["Hunter","Survival","hunter"],
+      ["Demon Hunter","Havoc","dh"],
+      ["Warrior","Fury","war"],
+      ["Mage","Frost","mage"],
+      ["Rogue","Subtlety","rogue"],
+      ["Monk","Windwalker","monk"],
+      ["Rogue","Assassination","rogue"],
+      ["Druid","Balance","druid"],
+      ["Death Knight","Frost","dk"],
+      ["Hunter","Marksmanship","hunter"]
+    ],
+    "B":[
+      ["Warlock","Demonology","lock"],
+      ["Mage","Arcane","mage"],
+      ["Evoker","Devastation","evoker"]
+    ],
+    "C":[
+      ["Warlock","Affliction","lock"],
+      ["Warlock","Destruction","lock"],
+      ["Mage","Fire","mage"]
+    ]
+  },
+  tank:{
+    "S":[
+      ["Druid","Guardian","druid"],
+      ["Monk","Brewmaster","monk"]
+    ],
+    "A+":[
+      ["Paladin","Protection","pal"],
+      ["Demon Hunter","Vengeance","dh"]
+    ],
+    "A":[
+      ["Warrior","Protection","war"]
+    ],
+    "B":[
+      ["Death Knight","Blood","dk"]
+    ]
+  },
+  healer:{
+    "S":[
+      ["Monk","Mistweaver","monk"],
+      ["Shaman","Restoration","shaman"]
+    ],
+    "A+":[
+      ["Priest","Discipline","priest"],
+      ["Druid","Restoration","druid"]
+    ],
+    "A":[
+      ["Paladin","Holy","pal"]
+    ],
+    "B":[
+      ["Evoker","Preservation","evoker"],
+      ["Priest","Holy","priest"]
+    ]
+  }
+};
+
+const ORDER = ["S","A+","A","B","C"];
+
+function chip(cls,spec,key,tier){
+  const col = C(key);
+  const ckey = spec+"_"+cls.replace(/ /g,'_');
+  const info = SPECS[ckey] || SPECS[spec] || {why:"",util:""};
+  const tip = `<div class="tip">
+    <div class="tname" style="color:${col}">${spec} ${cls}</div>
+    <div class="ttier">${tier} Tier &middot; Season 2 projection</div>
+    <div class="why">${info.why}</div>
+    <div class="util-h">Key utility</div>
+    <div class="util">${info.util}</div>
+  </div>`;
+  return `<div class="spec">
+    <img class="cicon" src="icon-${key}.png" alt="${cls}" style="box-shadow:0 0 7px ${col}" onerror="this.style.display='none'">
+    <span><span class="name">${spec}</span> <span class="cls">${cls}</span></span>
+    ${tip}
+  </div>`;
+}
+
+function render(role){
+  const panel = document.getElementById("panel-"+role);
+  const data = DATA[role];
+  let html = "";
+  ORDER.forEach(t=>{
+    const specs = data[t] || [];
+    const cls = "tier-"+t.replace("+","ap");
+    html += `<div class="tier-row">
+      <div class="tier-label ${cls}"><span>${t}</span></div>
+      <div class="tier-body ${specs.length?'':'empty'}">${specs.length?specs.map(s=>chip(s[0],s[1],s[2],t)).join(''):'No specs in this tier.'}</div>
+    </div>`;
+  });
+  panel.innerHTML = html;
+}
+["dps","tank","healer"].forEach(render);
+
+// ---- Render dungeon pool ----
+(function(){
+  const wrap = document.getElementById("dungeons");
+  wrap.innerHTML = DUNGEONS.map(d=>{
+    const [name,type,note,key] = d;
+    const tag = type==="new" ? `<span class="dtag new">New &middot; Midnight</span>` : `<span class="dtag ret">Returning</span>`;
+    return `<div class="dcard">
+      <div class="dh"><div class="dname">${name}</div>${tag}</div>
+      <div class="dnote">${note}</div>
+      <div class="dkey"><b>Season 2 change:</b> ${key}</div>
+    </div>`;
+  }).join("");
+})();
+
+// ---- Role switching ----
+const btns = document.querySelectorAll(".role-btn");
+const pill = document.getElementById("pill");
+const heroes = document.querySelectorAll(".hero");
+const panels = document.querySelectorAll(".role-panel");
+function movePill(idx){ pill.style.transform = `translateX(${idx*100}%)`; }
+function selectRole(role){
+  btns.forEach((b,i)=>{
+    const on = b.dataset.role===role;
+    b.classList.toggle("active",on);
+    if(on) movePill(i);
+  });
+  heroes.forEach(h=>h.classList.toggle("show", h.dataset.role===role));
+  panels.forEach(p=>p.classList.toggle("show", p.dataset.role===role));
+}
+btns.forEach(b=>b.addEventListener("click",()=>selectRole(b.dataset.role)));
+movePill(0);
+
+// ---- Cinematic ambient embers (overlay on the image) ----
+function embers(container, count, colors){
+  const el = document.getElementById(container);
+  if(!el || el.childElementCount) return;
+  for(let i=0;i<count;i++){
+    const s=document.createElement("div");
+    s.className="spark";
+    const sz = 2 + Math.random()*4;
+    const col = colors[Math.floor(Math.random()*colors.length)];
+    s.style.cssText=`width:${sz}px;height:${sz}px;background:${col};left:${5+Math.random()*90}%;
+      bottom:${10+Math.random()*30}%;box-shadow:0 0 ${sz*2}px ${col};opacity:.7;
+      animation:float-up ${3+Math.random()*3}s linear ${Math.random()*5}s infinite`;
+    el.appendChild(s);
+  }
+}
+embers("dps-fx",   20, ["#ff8a3c","#c060ff","#ffd27a"]);
+embers("tank-fx",  14, ["#5aa0e6","#e6c264"]);
+embers("healer-fx",18, ["#7dffae","#ffd98a"]);
+</script>
+</body>
+</html>
