@@ -475,7 +475,7 @@ function chip(cls,spec,key,tier){
     <div class="util-h">Key utility</div>
     <div class="util">${info.util}</div>
   </div>`;
-  return `<div class="spec" data-key="${key}">
+  return `<div class="spec" data-key="${key}" data-spec="${spec}">
     <img class="cicon" src="icon-${key}.png" alt="${cls}" style="box-shadow:0 0 7px ${col}" onerror="this.style.display='none'">
     <span><span class="name">${spec}</span> <span class="cls">${cls}</span></span>
     ${tip}
@@ -543,9 +543,31 @@ function embersInto(el, count, colors){
     el.appendChild(s);
   }
 }
+// Per-spec overrides (optional). Add an entry to customize a spec's title/desc/embers.
+// The IMAGE is auto-used if the file cinematic-<classKey>-<specSlug>.jpg exists
+// (specSlug = spec name lowercased, spaces -> hyphens, e.g. "Beast Mastery" -> "beast-mastery").
+// Until that file exists, the class poster (cinematic-<classKey>.jpg) shows as fallback.
+// Example: HERO_SPEC["war_arms"] = { title:"Into the Fray", desc:"...", embers:["#C79C6E","#e6c264"] };
+const HERO_SPEC = {};
+
+function specSlug(spec){ return spec.toLowerCase().replace(/ /g,"-"); }
+function getHero(classKey, spec){
+  const slug = specSlug(spec);
+  const specId = classKey+"_"+slug;
+  const base = HERO_CLASS[classKey] || { title:"", desc:"", embers:["#e6c264"] };
+  const ov = HERO_SPEC[specId];
+  const h = ov ? Object.assign({}, base, ov) : base;
+  return { specImg:`cinematic-${classKey}-${slug}.jpg`, classImg:`cinematic-${classKey}.jpg`,
+           title:h.title, desc:h.desc, embers:h.embers };
+}
+function topSpecHero(role){
+  const data = DATA[role];
+  for(const t of ORDER){ const arr = data[t]; if(arr && arr.length){ const s = arr[0]; return getHero(s[2], s[1]); } }
+  return getHero("war","Arms");
+}
 function setHero(h){
   const scene = document.getElementById("heroScene");
-  scene.style.background = `linear-gradient(115deg, rgba(8,6,16,.78), rgba(8,6,16,.25) 55%, rgba(8,6,16,.72)), url('${h.img}') center/cover no-repeat, linear-gradient(160deg,#0a0a14,#050608 70%)`;
+  scene.style.background = `linear-gradient(115deg, rgba(8,6,16,.78), rgba(8,6,16,.25) 55%, rgba(8,6,16,.72)), url('${h.specImg}') center/cover no-repeat, url('${h.classImg}') center/cover no-repeat, linear-gradient(160deg,#0a0a14,#050608 70%)`;
   document.getElementById("heroTitle").textContent = h.title;
   document.getElementById("heroDesc").textContent = h.desc;
   const fx = document.getElementById("heroFx");
@@ -561,7 +583,7 @@ function movePill(idx){ pill.style.transform = `translateX(${idx*100}%)`; }
 function selectRole(role){
   btns.forEach((b,i)=>{ const on=b.dataset.role===role; b.classList.toggle("active",on); if(on) movePill(i); });
   panels.forEach(p=>p.classList.toggle("show", p.dataset.role===role));
-  setHero(HERO_ROLE[role]);
+  setHero(topSpecHero(role));
 }
 btns.forEach(b=>b.addEventListener("click",()=>selectRole(b.dataset.role)));
 selectRole("dps");
@@ -574,8 +596,8 @@ document.addEventListener("click", function(e){
   });
   if(spec){
     spec.classList.add("tip-open");
-    const key = spec.dataset.key;
-    if(key && HERO_CLASS[key]) setHero(HERO_CLASS[key]);
+    const key = spec.dataset.key, specName = spec.dataset.spec;
+    if(key && specName) setHero(getHero(key, specName));
     e.stopPropagation();
   }
 });
