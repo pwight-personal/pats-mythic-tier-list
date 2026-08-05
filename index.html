@@ -94,6 +94,7 @@
     border-radius:9px 0 0 9px}
   .tier-label span{position:relative;z-index:2}
   .tier-label::after{content:"";position:absolute;inset:0;opacity:.18}
+  .tier-sp{color:#ff4d4d} .tier-sp::after{background:#ff4d4d}
   .tier-s{color:var(--t-s)} .tier-s::after{background:var(--t-s)}
   .tier-ap{color:var(--t-ap)} .tier-ap::after{background:var(--t-ap)}
   .tier-a{color:var(--t-a)} .tier-a::after{background:var(--t-a)}
@@ -232,7 +233,7 @@
 
 <div class="disclaimer">
   <b>How this list was built:</b> Rankings reflect the <b>Season 2 Mythic+ PTR meta</b> (Patch 12.1) per
-  community tier lists from <b>Petko / Icy Veins</b> (progressive PTR lists, updated July 26, 2026),
+  community tier lists from <b>Petko / Icy Veins</b> (progressive PTR lists, updated Aug 2, 2026),
   cross-checked against measurable performance data from <b>Warcraft Logs / Archon</b> (DPS damage),
   <b>U.GG</b> (healer HPS &amp; DPS), and community discussion. DPS is ranked by damage profile (single-target,
   AoE, burst, sustain) + utility; healers by HPS + DPS output + utility/externals; tanks by durability +
@@ -248,7 +249,7 @@
 
     <h4>What this is</h4>
     The tier lists follow the <b>Season 2 Mythic+ PTR meta</b> (Patch 12.1) using <b>community tier lists</b>
-    from Petko / Icy Veins (progressive PTR lists updated weekly, last July 26, 2026), blended with
+    from Petko / Icy Veins (progressive PTR lists updated weekly, last Aug 2, 2026), blended with
     <b>measurable performance data</b> from log sites. These are progressive, subjective lists &mdash;
     <b>not final</b>, and they change weekly as PTR tuning lands.
 
@@ -283,15 +284,16 @@
 
     <h4>Notable community calls (this build)</h4>
     <ul>
-      <li><b>Arcane Mage &amp; Balance Druid rise to S</b> after weak showings &mdash; Arcane's Apex/Pulse
-        rework and durability pass; Balance's damage-distribution shift.</li>
-      <li><b>Devourer Demon Hunter falls to A+</b> &mdash; Mastery &amp; Void Meta nerfs gutted the
-        Collapsing Star build; new builds are inferior so far.</li>
-      <li><b>Holy Paladin promoted to S</b> (healer) after multiple HPS buff rounds; <b>Mistweaver demoted
-        to A+</b> after repeated HPS nerfs (DPS still top-tier).</li>
-      <li><b>Protection Paladin is the new top tank</b> (biggest rework; demoted from S to A+ only after
-        consecutive nerfs); <b>Guardian Druid drops to B+</b> after its Apex revamp cut its damage.</li>
-      <li><b>Augmentation Evoker &amp; Vengeance DH = TBD</b> &mdash; too early to call final power.</li>
+      <li><b>New S+ tier: Arcane Mage &amp; Arms Warrior</b> top the DPS list &mdash; Arcane is the
+        strongest ranged spec after its Apex/Pulse rework + durability pass; Arms' DPS is extraordinary.</li>
+      <li><b>Outlaw Rogue &amp; Windwalker Monk jumped to S</b> &mdash; Outlaw promoted after a second
+        consecutive buff; Windwalker's damage exploded (but it's the squishiest spec, so survival caps it).</li>
+      <li><b>Blood Death Knight is the new top tank (S)</b> &mdash; most durable plus the highest tank damage;
+        Guardian rose to A+; Vengeance placed in A (no longer TBD).</li>
+      <li><b>Marksmanship Hunter nerfed A+&rarr;B+</b>; <b>Augmentation Evoker placed in A</b> (no longer TBD,
+        weaker than S1); Devourer DH still A+ but clearly weaker than Season 1.</li>
+      <li><b>Healer shifts:</b> Holy Paladin &amp; Restoration Shaman hold S; Mistweaver demoted A+&rarr;A
+        (HPS struggles); Restoration Druid A&rarr;B and Preservation B+&rarr;B; Holy Priest rose to B+.</li>
     </ul>
 
     <h4>Limitations</h4>
@@ -322,51 +324,47 @@ const C = (cls)=>COLORS[cls];
 
 // ---- Spec rationale + utility (Season 2 projection) ----
 const SPECS = {
-"Arms":{why:"PTR DPS output is extraordinary &mdash; one of the best melees. Reworked Ravager + Bloodletting/Broad Strokes; new AoE-focused tier set adds execute damage. Strong priority/execute profile.",util:"Rallying Cry, Battle Shout, Intimidating Shout (uncapped), Champion's Spear (grip), Piercing Howl"},
-"Unholy":{why:"Core rotation similar; Soul Reaper no longer auto-triggers Putrefy. Shift toward sustained damage but retains incredible burst/priority-target damage; tier set adds execute. One of the best melee on the PTR.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Asphyxiate (5s stun), Blinding Sleet"},
-"Balance":{why:"Damage distribution shifted (fewer spenders, more generators). Great mass AoE, weak pure single-target (hoping for buffs). Top-cut contender on the PTR.",util:"Mark of the Wild (+3% versa), Solar Beam (8s AoE silence), Typhoon, Soothe, Ursol's Vortex"},
-"Arcane":{why:"Big rework: Apex rework, Arcane Pulse redesigned, durability pass. Much stronger ST &amp; AoE on PTR; no longer dies when a boss looks at it. One of the stronger ranged contenders &mdash; a major riser.",util:"Arcane Intellect, Spellsteal, Remove Curse, Ring of Frost, Improved Warding (-4% AoE dmg)"},
-"Elemental":{why:"Damage shifted out of Ascendance into baseline &rarr; better sustained; Stormbringer nerfed, Farseer builds rise. One of the best single-target outputs in M+ plus top utility. Promising on the PTR.",util:"Skyfury, Bloodlust, Earth Elemental, Earthquake (knockdown), Thunderstorm (knockback), Purge"},
-"Devourer":{why:"Heavy nerfs: Mastery &amp; Void Metamorphosis damage cut, Collapsing Star/Annihilator build gutted. New 'melee' &amp; Void-Scarred builds are inferior. Felt considerably worse &mdash; biggest faller, awaiting adjustments.",util:"Chaos Brand (+3% magic), Darkness (avoid chance), Sigil of Misery, Consume Magic"},
-"Retribution":{why:"Sustain buffs at the cost of some burst; Art of War now stacks to 2 (less Shaman-reliant). New 4pc built around Final Verdict in AoE (criticized). Performance and playstyle good overall.",util:"Devotion Aura (-3% raid dmg), Lay on Hands, Blessing of Sacrifice/Protection/Freedom, Intercession (CR)"},
-"Frost_Death_Knight":{why:"Power shifted out of cooldowns into sustained damage; still some of the highest burst on the PTR plus now solid sustained DPS. Incredibly tanky. One of the best melee choices.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Asphyxiate, Control Undead"},
-"Marksmanship":{why:"Reworked Explosive Shot returns; damage profile more sustain (still bursty). Performance up drastically after recent buffs, but slow/frustrating Aimed Shot cast. Major riser after buffs.",util:"Hunter's Mark, Tranquilizing Shot (enrage+magic), Freezing Trap, Roar of Sacrifice, Binding Shot"},
-"Shadow":{why:"Ancient Madness &amp; Improved Voidform redesigned; new Shadeburst; gameplay around Void Volley in cooldowns. One of the most fun PTR specs (Archon/Misery). Great priority damage during AoE + on-demand burst.",util:"Power Infusion, Power Word: Fortitude, Mass Dispel, Mind Soothe (skip aid), Vampiric Embrace"},
-"Havoc":{why:"Few changes; Fel-Scarred builds favored. Sustained &amp; burst damage far above average; recent buffs pushed DPS even higher. Very competitive on the PTR.",util:"Chaos Brand, Darkness, Sigil of Misery, Consume Magic"},
-"Destruction":{why:"10% aura buff, Conflagration of Chaos redesign, Hellcaller change. Great sustained AoE + strong burst windows (Summon Infernal). Lacks single-target to compete higher.",util:"Healthstone, Soulstone (CR), Demonic Gateway, Shadowfury (AoE stun), Blight of Tongues/Weakness"},
-"Beast Mastery":{why:"Nerfs to Kill Cleave/Piercing Fangs; Razor Sharp/Blood Frenzy reworks; Beast Cleave 10s (easy uptime). 4pc shifts to Cobra Shot. One of the highest single-target DPS + great sustained. Newcomer-friendly.",util:"Hunter's Mark, Tranquilizing Shot (enrage+magic), Freezing Trap, Roar of Sacrifice, Misdirection"},
-"Enhancement":{why:"Similar to before (Stormbringer strong); more Crash Lightning/Voltaic Blaze. Competitive: great Ascendance windows, decent sustained (Doom Winds proc-dependent), fun. Needs more damage to reach the top tiers.",util:"Skyfury, Bloodlust, Capacitor Totem, Wind Rush Totem (mass freedom), Earth Elemental, Purge"},
-"Feral":{why:"Minor changes; buffs to Rip and Tear, slight Apex nerfs. Great sustain/AoE/priority DPS/burst; energy issues mostly resolved (Soul of the Forest). Bursty physical-comp fit.",util:"Mark of the Wild (+3% versa), Stampeding Roar, Soothe (enrage dispel), Typhoon, Ursol's Vortex"},
-"Affliction":{why:"Barely changed; new tier set makes gameplay smoother (Seed applies UA at 20%). Better priority damage. Great burst + sustained AoE; single-target a concern.",util:"Healthstone, Soulstone (CR), Demonic Gateway, Curse of Tongues/Weakness, Banish, Singe Magic (Imp)"},
-"Outlaw":{why:"Build diversity buffs + QoL; Killing Spree no longer just a Trickster vehicle; Hidden Opportunity builds viable. New tier-set flattens energy issues. Great sustained, little on-demand burst (no meaningful CDs).",util:"Shroud of Concealment, Tricks of the Trade, Kidney Shot, Shiv (enrage dispel), Atrophic Poison (-4% enemy dmg)"},
-"Assassination":{why:"Apex management smoother; great burst + funnel/priority damage. Burst nerfed (Deathmark/Kingsbane) but core abilities bolstered &rarr; better sustained. Playstyle great; DPS tuning still lacking; uninteresting tier set.",util:"Shroud of Concealment, Tricks, Iron Wire (Garrote silence), Shiv, Kidney Shot"},
-"Survival":{why:"Damage shifted to Boomstick/Wildfire Bomb; rotation centers on Wildfire Bomb (~42&ndash;50% of dungeon damage after buffs). Solid all-around: good ST, burst AoE, sustained AoE.",util:"Hunter's Mark, Tranquilizing Shot, Freezing Trap, Binding Shot (AoE root), Roar of Sacrifice"},
-"Demonology":{why:"No changes; only a new tier set. Identical rotation; consistent damage with minor spikes around Summon Demonic Tyrant. Middle of the pack, average DPS, low-impact utility.",util:"Healthstone, Soulstone (CR), Demonic Gateway, Grimoire Imp Lord/Fel Ravager, Shadowfury (AoE stun)"},
-"Frost_Mage":{why:"Burst reduced (Apex nerfs) + 4% aura buff for sustain. Few changes; buffs small/inconsequential vs rising peers. Needs changes before Season 2.",util:"Arcane Intellect, Spellsteal, Remove Curse, Ring of Frost, permanent slow"},
-"Fire":{why:"Burst reduction (Combustion/Apex) &rarr; sustained; Pyroblast/Flamestrike buffed + 12% aura buffs. Pyroclasm playstyle reinforced by tier set. Performance/defensives still need love but better after buffs.",util:"Arcane Intellect, Spellsteal, Remove Curse, Dragon's Breath, Improved Warding (-4% AoE dmg)"},
-"Fury":{why:"Core similar; new tier-set makes Raging Blow a bigger priority. Faster-paced, short CDs, good priority/ST; weakness is mass AoE (long-standing issue).",util:"Rallying Cry, Battle Shout, Intimidating Shout (uncapped), Piercing Howl, Champion's Spear"},
-"Windwalker":{why:"Numbers adjustments: less Zenith burst &rarr; more sustained; extra Spinning Crane Kick firepower (still not enough). Still target-capped &rarr; falls behind on large pulls. Fun but the numbers are not there.",util:"Mystic Touch (+5% phys), Leg Sweep, Ring of Peace, Paralysis (stun+enrage dispel), Tiger's Lust"},
-"Devastation":{why:"Minor changes; Rising Fury redesign, Scalecommander nerfs. Largely unchanged (disappointing). Great on-demand burst (ST/AoE) but falls behind hard off-cooldown. Least-targeted spec for changes.",util:"Blessing of the Bronze, Wing Buffet (pushback), Expunge (poison), Zephyr, Cauterizing Flame (bleed)"},
-"Subtlety":{why:"Burst reduced, better sustained to compensate. Slower rotation; mandatory talents (Goremaw's Bite, reworked Lingering Shadow). Tuning off + rotational flaws; unfinished, likely more changes.",util:"Shroud of Concealment, Tricks of the Trade, Kidney Shot, Shiv, Distract"},
-"Augmentation":{why:"Scalecommander nerfed (strongest build); less Duplicate uptime; Upheaval no longer knocks enemies up (fewer disrupts). Weaker than before; too early to estimate full power &mdash; ranked TBD.",util:"Blessing of the Bronze, Prescience, Oppressing Roar (AoE enrage remove), Zephyr, Source of Magic, Spatial Paradox"},
-// Tanks
-"Blood":{why:"Barely changed + new tier set; small number adjustments. Damage competitive, but durability still leaves something desired &mdash; can go 100&rarr;0 when defensives run out. Only tank with NO unique party-wide utility (severe disadvantage); DPS DKs cover grip/utility.",util:"Anti-Magic Zone, Death Grip, Raise Ally, Gorefiend's Grasp (mass grip), Asphyxiate"},
-"Protection_Paladin":{why:"Biggest set of tank changes; talents repositioned. One of the most durable tanks on the PTR + incredibly high damage + best group utility. Demoted from S after consecutive nerfs.",util:"Avenger's Shield (silence), Devotion Aura (-3% raid dmg), Lay on Hands, Blessing of Spellwarding/Sacrifice/Protection/Freedom, Intercession"},
-"Protection_Warrior":{why:"Stronger defensive + offensive package; steadily climbing. Great durability + strong damage + solid utility (CC, Battle Shout). Especially strong in physical-DPS comps.",util:"Rallying Cry, Battle Shout, Shockwave, Intimidating Shout (uncapped), Spell Reflection"},
-"Guardian":{why:"Complete Apex revamp; must be more careful spending Rage. Durability great but one of the lowest tank DPS outputs. Brings Mark of the Wild. Far from the best on the PTR.",util:"Mark of the Wild (+3% versa), Stampeding Roar, Soothe (enrage dispel), Ursol's Vortex, Incapacitating Roar"},
-"Brewmaster":{why:"Celestial Brew/Infusion absorbs +25%, Vital Flame heals more, Staggering Strikes +25%; new tier-set boosts damage. Largely unchanged; struggles vs top tanks in durability (biggest nemesis). Physical-comp staple.",util:"Mystic Touch (+5% phys), Leg Sweep, Ring of Peace, Paralysis, Detox"},
-"Vengeance":{why:"Minor changes; healing gains (Soul Cleave/Fel Devastation/Feast of Souls); Sigil of Chains baseline. Great on the PTR: tanky, great damage, amazing utility. Defensives lack 100% uptime but kite fine. Final rank TBD.",util:"Chaos Brand, Darkness, Sigil of Silence, Sigil of Chains (grip), Sigil of Misery, Consume Magic"},
-// Healers
-"Holy_Paladin":{why:"Phenomenal after multiple HPS buff rounds. Strong priority-target healing + one of the best group utility kits. Promoted to S. Damage output leaves something to be desired (the only lacking area).",util:"Devotion Aura (-3% raid dmg), Lay on Hands, Intercession (CR), Blessing of Sacrifice/Protection/Freedom, Hammer of Justice"},
-"Restoration_Shaman":{why:"Barely changed; Season 2 emphasizes Healing Rain (tier set bolsters it). Incredible single-target healing; AoE HPS a struggle when the group isn't stacked. One of the lowest healer DPS. Always has a place in physical comps (Skyfury, Bloodlust).",util:"Skyfury, Bloodlust, Spirit Link Totem, Capacitor Totem, Wind Rush Totem, Purge, Earth Elemental"},
-"Mistweaver":{why:"Nerfs to Way of the Crane (playstyle changes by mob count); Jadefire Teachings buff. Amazing HPS profile + even better DPS. Demoted from S after repeated HPS nerfs; DPS still amazing but HPS lower than early PTR.",util:"Mystic Touch (+5% phys), Life Cocoon, Revival (mass dispel), Leg Sweep, Ring of Peace, Paralysis"},
-"Restoration_Druid":{why:"Mostly negative changes: Abundance nerf, lost HoT extension from Swiftmend. HPS profile not doing well on the PTR. Unique utility always valuable; needs more love to climb. Bottom half for now.",util:"Mark of the Wild (+3% versa), Ironbark (external DR), Innervate, Stampeding Roar, Soothe, Remove Corruption"},
-"Discipline":{why:"Minor facelift: Mind Blast more frequent/weaker, procs Void Shield; more build diversity (Voidweaver back). Decent healing; incredible DPS (often doubling other healers, esp. single-target). Mana-hungry. Great utility. Needs HPS/mana buffs to climb.",util:"Pain Suppression, Power Word: Barrier, Power Infusion, Power Word: Fortitude, Mass Dispel"},
-"Preservation":{why:"Merithra's Blessing changes; power into core abilities; Dream Breath HoT greatly increased (great for rot). One of the highest HPS profiles (if positioning met) + high DPS. Few impactful group buffs (main drawback); fate tied to the Augmentation meta.",util:"Blessing of the Bronze, Rewind (33% damage rewind), Expunge (poison), Zephyr, Cauterizing Flame, Rescue"},
-"Holy_Priest":{why:"Mana attention: reduced Benediction cost, Apotheosis buffs, healing up. Core rotation unchanged. Decent HPS but struggles with steady continuous healing when CDs are down; mana limiting. Disc counterpart performs better; can't rank higher.",util:"Guardian Spirit (cheat death), Power Infusion, Power Word: Fortitude, Mass Dispel, Psychic Scream"}
+  "dk_unholy":{title:"Frostmourne Hungers", desc:"An Unholy Death Knight commands the dead — Lesser Ghouls swarm, disease spreads through the pack, and the army of the dead crashes into the front while Putrefy rots the priority target down.", embers:["#C41F3B","#e6c264"]},
+  "dk_frost":{title:"Ice and Obliteration", desc:"A Frost Death Knight channels the frozen north — Frostwyrm's Fury descends, Howling Blast cleaves the pack, and Obliteration turns every runic strike into a burst of shattering ice.", embers:["#C41F3B","#69CCF0"]},
+  "dk_blood":{title:"The Crimson Scourge", desc:"Now one of the most durable tanks on the PTR with the highest damage output of any tank spec — Blood Plague heals as it rots, Dancing Rune Weapon mirrors the assault, and Death Grip groups the ranged and caster mobs. The only tank with no unique party-wide utility, but a genuine meta contender this season.", embers:["#C41F3B","#e6c264"]},
+  "dh_havoc":{title:"Fury of the Illidari", desc:"A Havoc Demon Hunter blurs between blades — Fel Rush carves the line, Eye Beam tears the pack, and Metamorphosis unleashes a storm of chaos strikes that never slows.", embers:["#A330C9","#ff8a3c"]},
+  "dh_vengeance":{title:"Sigil of Hatred", desc:"A Vengeance Demon Hunter turns demon power inward — Fiery Brand brands the target, Sigils of Silence and Misery choke the casters, and Soul Cleave devours the damage dealt back as survival. Great damage and amazing utility; middling durability is the only thing holding it back.", embers:["#A330C9","#33937F"]},
+  "dh_devourer":{title:"Into the Fray", desc:"A Devourer Demon Hunter gathers souls into Void Metamorphosis, spiraling inward before Collapsing Star tears through the pack — the Illidari's newest art, where every kill feeds the void.", embers:["#A330C9","#ff8a3c"]},
+  "druid_balance":{title:"Eclipse of the Moon", desc:"A Balance Druid rides the Eclipse — Starfall blankets the pack, Moonfire marks the prey, and Starsurge channels the gathered Astral Power into a single burst of celestial wrath. Incredible mass AoE plus a competitive single-target, and Mark of the Wild remains one of the best party buffs.", embers:["#FF7D0A","#69CCF0"]},
+  "druid_feral":{title:"Tooth and Claw", desc:"A Feral Druid shreds in cat form — Rake and Rip bleed the priority target while Primal Wrath spreads the carnage, energy flowing freely as the bleeds stack and the pack falls.", embers:["#FF7D0A","#ABD473"]},
+  "druid_guardian":{title:"Bulwark Unbroken", desc:"A Guardian Druid plants wide in bear form — Ironfur layers as Rage feeds Gory Fur, each making the other free, and the steady wall holds where the spiky glass cannon cracks. Durability is great even if its damage lags most tanks; rose into A+ on that survivability and Mark of the Wild.", embers:["#FF7D0A","#7dffae"]},
+  "druid_restoration":{title:"Bloom of the Wild", desc:"A Restoration Druid blankets the party in blooms — Rejuvenation and Lifebloom stack, Wild Growth spreads the mending, and Tranquility roots the group in protective life. Mostly negative changes this cycle (Abundance nerf, lost HoT extension); HPS isn't doing well, so it's demoted to B and hoping for buffs.", embers:["#FF7D0A","#7dffae"]},
+  "evoker_devastation":{title:"Fire from the Sky", desc:"A Devastation Evoker descends — Dragonrage ignites the air, Pyre bursts across the pack, and Unbound Flame erupts as the cooldown ends in a cascade of molten emerald fire. Largely unchanged and disappointing; demoted to C.", embers:["#33937F","#ff8a3c"]},
+  "evoker_augmentation":{title:"Bending of Time", desc:"An Augmentation Evoker weaves time itself — Breath of Eons streaks the battlefield, Prescience marks the prey, and allies surge with power as the dragon bends fate. Scalecommander (its best build) was nerfed, with less Duplicate uptime and no more Upheaval knock-up; weaker than Season 1 and now placed in A.", embers:["#33937F","#69CCF0"]},
+  "evoker_preservation":{title:"Verdant Embrace", desc:"A Preservation Evoker cradles the party in emerald life — Dream Breath mends over time (greatly increased for rot), Echo duplicates the spell, and Rewind unspools the last five seconds of damage taken. One of the highest HPS profiles plus high DPS, but no impactful group buff; demoted to B, with its fate tied to the Augmentation meta.", embers:["#33937F","#7dffae"]},
+  "hunter_beast-mastery":{title:"Master and Beast", desc:"A Beast Mastery Hunter looses the pack — the pet tears in as Kill Command drives it home, Beast Cleave spreads the carnage, and Cobra Shot weaves the damage into a relentless stream. Nerfs to Kill Cleave and Piercing Fangs plus a Cobra Shot-focused tier set demoted it to B, though it stays newcomer-friendly.", embers:["#ABD473","#e6c264"]},
+  "hunter_marksmanship":{title:"One Shot, One Kill", desc:"A Marksmanship Hunter picks apart the line from range — Aimed Shot pierces, Rapid Fire shreds, and the reworked Explosive Shot blooms again and again into the cluster. After the most recent nerfs it's rated average once more and dropped to B+; the slow Aimed Shot cast stays frustrating.", embers:["#ABD473","#69CCF0"]},
+  "hunter_survival":{title:"Up Close and Personal", desc:"A Survival Hunter wades in with spear and flame — Wildfire Bomb blooms across the pack (a great chunk of dungeon damage), Raptor Strike carves the priority target, and a well-placed Freezing Trap locks the threat down. Performance is average all around, reflected in its B+ placement.", embers:["#ABD473","#ff8a3c"]},
+  "mage_arcane":{title:"Arcane Fury", desc:"An Arcane Mage bends the fabric of magic — Touch of the Magi loads the next burst, Arcane Barrage crackles across the pack, and Prismatic Bolt erupts as the charges peak. After the Apex rework, Arcane Pulse redesign, and durability pass, it's the strongest ranged spec on the PTR and promoted to the new S+ tier.", embers:["#69CCF0","#ffffff"]},
+  "mage_fire":{title:"Combustion", desc:"A Fire Mage blooms into Combustion — Pyroblast rains, Flamestrike blankets the pack, and every crit chains into the next as the inferno feeds itself. Burst was trimmed into more sustained, then recent aura buffs pushed it up to A; the Pyroclasm playstyle is reinforced by the tier set, though defensives still need love.", embers:["#69CCF0","#ff8a3c"]},
+  "mage_frost":{title:"Glacial Shatter", desc:"A Frost Mage freezes the fight — Frozen Orb spreads the chill, Glacial Spike shatters the priority target, and Ray of Frost lances through as the Freezing Stacks pop. Burst was nerfed for sustain via a 4% aura buff, but few other changes; still waiting on more before Season 2.", embers:["#69CCF0","#ffffff"]},
+  "monk_brewmaster":{title:"Stagger and Sip", desc:"A Brewmaster Monk drinks deep — Stagger soaks the hit, Purifying Brew clears the wound, and Celestial Brew shields as the keg spins and the brew flows. Largely unchanged; struggles vs the top tanks in durability, which remains its biggest nemesis.", embers:["#00FF96","#e6c264"]},
+  "monk_mistweaver":{title:"Hands of Renewal", desc:"A Mistweaver Monk weaves Soothing Mist through the party — Gust of Mists amplifies the mending, Renewing Mist spreads, and Revival clears the group in a single jade breath. DPS is still amazing, but repeated HPS nerfs mean it now struggles in heavy HPS-check situations, demoting it to A.", embers:["#00FF96","#ffd98a"]},
+  "monk_windwalker":{title:"Zenith of the Storm", desc:"A Windwalker Monk flows through the pack — Spinning Crane Kick spins, Blackout Kick chains, and Zenith ignites a burst of martial storm as the chi peaks. After several consecutive buffs its damage exploded into one of the highest burst melee on the PTR, promoting it to S — the catch is it's one of the squishiest specs, so surviving high keys is the limit on that damage.", embers:["#00FF96","#69CCF0"]},
+  "pal_retribution":{title:"Light Unyielding", desc:"A Retribution Paladin raises the hammer — Templar's Verdict cleaves, Divine Storm sweeps the pack, and Avenging Wrath ignites a burst of holy fury on the unworthy. Sustain up at the cost of some burst; Art of War now stacks to 2 (less Shaman-reliant).", embers:["#F58CBA","#e6c264"]},
+  "pal_protection":{title:"Shield of the Light", desc:"A Protection Paladin raises shield and Light — Avenger's Shield silences the cast, Shield of the Righteous bolsters the wall, and Consecration sanctifies the ground the fight is held on. The biggest tank rework; one of the most durable plus incredibly high damage and best utility — demoted from S only after consecutive nerfs.", embers:["#F58CBA","#e6c264"]},
+  "pal_holy":{title:"Lay on Hands", desc:"A Holy Paladin channels the Light — Holy Shock mends and smites in one, Light of Dawn washes the group, and Lay on Hands pulls an ally back from the very brink. Promoted to S after multiple HPS buff rounds; damage output is the only area still lacking.", embers:["#F58CBA","#ffd98a"]},
+  "priest_discipline":{title:"Atonement", desc:"A Discipline Priest heals through damage — Smite and Penance weave atonement onto the party, and every blow lands as salvation while the void shields the front. Incredible DPS (often doubling other healers) but mana-hungry; needs HPS/mana buffs to climb higher.", embers:["#ffffff","#9482C9"]},
+  "priest_holy":{title:"Word of Light", desc:"A Holy Priest speaks the Word — Holy Word: Serenity mends, Sanctify blankets the group, and Guardian Spirit cradles a chosen ally through the killing blow. Mana got attention (cheaper Benediction, Apotheosis buffs) and it rose to B+, though it still struggles with steady healing when CDs are down and Disc outperforms it.", embers:["#ffffff","#ffd98a"]},
+  "priest_shadow":{title:"Shadow and Grace", desc:"A Shadow Priest unfolds Voidform — Shadow Word: Madness spreads, Void Volley erupts in the cooldown, and psychic bursts ripple through the pack as the whispers build. One of the most fun PTR specs (Archon/Misery) with great priority damage; solid, though no longer top-tier after other specs rose around it.", embers:["#9482C9","#ffffff"]},
+  "rogue_assassination":{title:"Death by a Thousand Cuts", desc:"An Assassination Rogue bleeds the target dry — Garrote and Rupture stack, Envenom lands the killing strike, and the bleeds spread as the silence takes the caster's voice. Burst was nerfed (Deathmark/Kingsbane) but core abilities were bolstered for better sustain; rose to A+ after large aura buffs.", embers:["#FFF569","#ffffff"]},
+  "rogue_outlaw":{title:"Roll the Bones", desc:"An Outlaw Rogue plays the hand — Sinister Strike builds, Dispatch lands, and Killing Spree carves through the pack as the bones roll the group's favor. Build diversity buffs and QoL (Killing Spree no longer just a Trickster vehicle, Hidden Opportunity viable, energy smoothed by the tier set) promoted it to S after a second consecutive buff — great sustained melee.", embers:["#FFF569","#e6c264"]},
+  "rogue_subtlety":{title:"From the Shadows", desc:"A Subtlety Rogue slips between heartbeats — Shadow Dance unfolds, Shuriken Storm blankets the pack, and the strike lands before the target knows it was thrown. Burst was trimmed for better sustain (mandatory Goremaw's Bite, reworked Lingering Shadow); still unfinished with rotational flaws, but rose to B+ with more changes likely.", embers:["#FFF569","#ffffff"]},
+  "shaman_elemental":{title:"Stormcall", desc:"An Elemental Shaman calls the storm — Chain Lightning leaps the pack, Earthquake cracks the ground, and Bloodlust ignites the group's cooldown windows as the elements answer. Damage shifted out of Ascendance into baseline for better sustained; one of the best single-target outputs plus top utility.", embers:["#0070DE","#7dffae"]},
+  "shaman_enhancement":{title:"Stormbringer", desc:"An Enhancement Shaman strikes with the storm — Crash Lightning cleaves the pack, Stormstrike chains, and Ascendance ignites a burst of elemental fury at the peak. Competitive (great Ascendance windows, fun playstyle) but needs more damage to reach the top tiers.", embers:["#0070DE","#69CCF0"]},
+  "shaman_restoration":{title:"Healing Rain", desc:"A Restoration Shaman calls the waters — Healing Rain blankets the group, Chain Heal leaps between allies, and Spirit Link Totem shares the group's fate through the worst of it. An absolutely incredible HPS profile is the main reason for its S placement; its low healer DPS costs time, but Skyfury and Bloodlust keep it essential in physical comps.", embers:["#0070DE","#7dffae"]},
+  "lock_affliction":{title:"Death by Inches", desc:"An Affliction Warlock rots the pack slow — Agony and Corruption stack, Seed of Corruption blooms into the cluster, and the curses spread as the health drains drop by drop. The new tier set smooths the rotation and improves priority damage; great AoE but single-target is a concern.", embers:["#9482C9","#ff8a3c"]},
+  "lock_demonology":{title:"Legion of the Damned", desc:"A Demonology Warlock opens the gate — demonic hordes swarm, Summon Demonic Tyrant empowers the legion, and Implosion detonates the pack in a single roar of fel. No changes beyond the tier set; competitive ST and AoE, but lacks high-impact group utility.", embers:["#9482C9","#ff8a3c"]},
+  "lock_destruction":{title:"Burn It All", desc:"A Destruction Warlock calls the Infernal — Chaos Bolt pierces, Rain of Fire blankets the pack, and Cataclysm scorches the line as the gateway opens a shortcut through. A recent damage buff plus the Conflagration of Chaos redesign pushed it to A+; it still lacks the single-target to compete at the very top.", embers:["#9482C9","#ff8a3c"]},
+  "war_arms":{title:"For the Battle", desc:"An Arms Warrior raises the greatsword — Ravager erupts in a storm of steel, Colossus Smash exposes the wound, and Execute finishes the fight as the bleeds stack and the front line carves. PTR DPS output is extraordinary — one of the best melees, promoted to the new S+ tier.", embers:["#C79C6E","#e6c264"]},
+  "war_fury":{title:"Bloodthirst", desc:"A Fury Warrior whirls into the pack — Raging Blow chains, Whirlwind cleaves, and Rampage surges as the rage builds and the bloodthirst never lets the blade rest. The new tier-set makes Raging Blow a bigger priority; good priority/ST but mass AoE is the weakness, dropping it to B.", embers:["#C79C6E","#ff8a3c"]},
+  "war_protection":{title:"Shield Wall", desc:"A Protection Warrior plants the shield — Ignore Pain soaks the hit, Shield Slam sustains the rage, and Shield Wall turns the group into a wall as the front holds the line. Steadily climbing with strong durability and damage; especially strong in physical-DPS comps via Battle Shout.", embers:["#C79C6E","#e6c264"]}
 };
-
-// ---- Season 2 dungeon pool ----
 const DUNGEONS = [
  ["Altar of Fangs","new","New Midnight instance tied to the troll/snake/Curse of Ul'atek theme. Fresh layout with no legacy pain points to fix &mdash; built for modern M+ pacing.","New Midnight dungeon"],
  ["Murder Row","new","Cantina event reworked: more progress from success, far less loss on failure, no job switching. Caster density after Zaen Bladesorrow cut, and several casts removed from Corrupted Warlocks/Fel Hunters/Neophytes.","Cantina event &amp; caster spam fixed"],
@@ -381,64 +379,62 @@ const DUNGEONS = [
 // spec: [className, specName, classKey]
 const DATA = {
   dps:{
+    "S+":[
+      ["Mage","Arcane","mage"],
+      ["Warrior","Arms","war"]
+    ],
     "S":[
-      ["Warrior","Arms","war"],
-      ["Death Knight","Unholy","dk"],
-      ["Druid","Balance","druid"],
-      ["Mage","Arcane","mage"]
+      ["Rogue","Outlaw","rogue"],
+      ["Monk","Windwalker","monk"]
     ],
     "A+":[
       ["Shaman","Elemental","shaman"],
-      ["Demon Hunter","Devourer","dh"],
-      ["Paladin","Retribution","pal"],
+      ["Druid","Balance","druid"],
       ["Death Knight","Frost","dk"],
-      ["Hunter","Marksmanship","hunter"],
-      ["Priest","Shadow","priest"],
-      ["Demon Hunter","Havoc","dh"]
+      ["Rogue","Assassination","rogue"],
+      ["Warlock","Destruction","lock"],
+      ["Paladin","Retribution","pal"],
+      ["Death Knight","Unholy","dk"],
+      ["Demon Hunter","Havoc","dh"],
+      ["Demon Hunter","Devourer","dh"]
     ],
     "A":[
-      ["Warlock","Destruction","lock"],
-      ["Hunter","Beast Mastery","hunter"],
       ["Shaman","Enhancement","shaman"],
-      ["Druid","Feral","druid"],
+      ["Warlock","Demonology","lock"],
+      ["Priest","Shadow","priest"],
+      ["Mage","Fire","mage"],
       ["Warlock","Affliction","lock"],
-      ["Rogue","Outlaw","rogue"],
-      ["Rogue","Assassination","rogue"],
-      ["Hunter","Survival","hunter"],
-      ["Warlock","Demonology","lock"]
+      ["Druid","Feral","druid"],
+      ["Evoker","Augmentation","evoker"]
     ],
     "B+":[
       ["Mage","Frost","mage"],
-      ["Mage","Fire","mage"],
-      ["Warrior","Fury","war"],
-      ["Monk","Windwalker","monk"]
-    ],
-    "B":[
-      ["Evoker","Devastation","evoker"]
-    ],
-    "C":[
+      ["Hunter","Survival","hunter"],
+      ["Hunter","Marksmanship","hunter"],
       ["Rogue","Subtlety","rogue"]
     ],
-    "TBD":[
-      ["Evoker","Augmentation","evoker"]
+    "B":[
+      ["Warrior","Fury","war"],
+      ["Hunter","Beast Mastery","hunter"]
+    ],
+    "C":[
+      ["Evoker","Devastation","evoker"]
     ]
   },
   tank:{
+    "S":[
+      ["Death Knight","Blood","dk"]
+    ],
     "A+":[
-      ["Death Knight","Blood","dk"],
-      ["Paladin","Protection","pal"]
+      ["Paladin","Protection","pal"],
+      ["Druid","Guardian","druid"]
     ],
     "A":[
+      ["Demon Hunter","Vengeance","dh"],
       ["Warrior","Protection","war"]
-    ],
-    "B+":[
-      ["Druid","Guardian","druid"]
     ],
     "B":[
       ["Monk","Brewmaster","monk"]
-    ],
-    "TBD":[
-      ["Demon Hunter","Vengeance","dh"]
     ]
   },
   healer:{
@@ -446,23 +442,20 @@ const DATA = {
       ["Paladin","Holy","pal"],
       ["Shaman","Restoration","shaman"]
     ],
-    "A+":[
-      ["Monk","Mistweaver","monk"]
-    ],
     "A":[
-      ["Druid","Restoration","druid"]
+      ["Monk","Mistweaver","monk"]
     ],
     "B+":[
       ["Priest","Discipline","priest"],
-      ["Evoker","Preservation","evoker"]
+      ["Priest","Holy","priest"]
     ],
     "B":[
-      ["Priest","Holy","priest"]
+      ["Druid","Restoration","druid"],
+      ["Evoker","Preservation","evoker"]
     ]
   }
 };
-
-const ORDER = ["S","A+","A","B+","B","C","TBD"];
+const ORDER = ["S+","S","A+","A","B+","B","C","TBD"];
 
 function chip(cls,spec,key,tier){
   const col = C(key);
@@ -482,7 +475,7 @@ function chip(cls,spec,key,tier){
   </div>`;
 }
 
-const TIERCLS = {"S":"tier-s","A+":"tier-ap","A":"tier-a","B+":"tier-bp","B":"tier-b","C":"tier-c","TBD":"tier-tbd"};
+const TIERCLS = {"S+":"tier-sp","S":"tier-s","A+":"tier-ap","A":"tier-a","B+":"tier-bp","B":"tier-b","C":"tier-c","TBD":"tier-tbd"};
 function render(role){
   const panel = document.getElementById("panel-"+role);
   const data = DATA[role];
