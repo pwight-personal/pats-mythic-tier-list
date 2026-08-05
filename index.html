@@ -458,8 +458,8 @@ const ORDER = ["S+","S","A+","A","B+","B","C","TBD"];
 
 function chip(cls,spec,key,tier){
   const col = C(key);
-  const ckey = spec+"_"+cls.replace(/ /g,'_');
-  const info = SPECS[ckey] || SPECS[spec] || {why:"",util:""};
+  const specId = key+"_"+specSlug(spec);
+  const info = SPECS[specId] || {why:"",util:""};
   const tip = `<div class="tip">
     <div class="tname" style="color:${col}">${spec} ${cls}</div>
     <div class="ttier">${tier} Tier &middot; Season 2 PTR</div>
